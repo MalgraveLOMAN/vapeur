@@ -4,9 +4,12 @@ const PORT = 3000;
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const bodyParser = require("body-parser");
+
 
 
 app.use(express.static(__dirname + '/'));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
     res.send("Hello, World!");

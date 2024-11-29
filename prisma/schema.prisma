@@ -12,3 +12,42 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model TypeEnum {
+  id          Int     @id @default(autoincrement())
+  type String
+}
+
+/*
+  Action
+  Aventure
+  RPG
+  Simulation
+  Sport
+  MMORPG
+*/
+model Type {
+  id          Int     @id @default(autoincrement())
+  name        TypeEnum
+  description String
+  games       Game[]
+}
+
+
+
+model Editor {
+  id    Int    @id @default(autoincrement())
+  name  String
+  games Game[]
+}
+
+model Game {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  typeId      Int
+  editorId    Int
+  type        Type     @relation(fields: [typeId], references: [id])
+  editor      Editor   @relation(fields: [editorId], references: [id])
+}
+
