@@ -30,6 +30,7 @@ model Game {
   id          Int      @id @default(autoincrement())
   title       String
   description String
+  releaseDate DateTime
   typeId      Int
   editorId    Int
   type        Type     @relation(fields: [typeId], references: [id])
