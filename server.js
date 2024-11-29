@@ -17,8 +17,11 @@ hbs.registerPartials(path.join(__dirname, "views", "partials"));
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-    res.send("Hello, World!");
+app.get("/", async (req, res) => {
+    const games = await prisma.Game.findMany();
+    res.render("games/index", {
+        games,
+    });
 });
 
 app.listen(PORT, () => {

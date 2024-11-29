@@ -6,6 +6,7 @@ This command :
 
 
 Dev Only : 
+0.Install node_modules : npm install
 1.Start Prisma Client npx prisma generate
 2.Run server hot loading : npm run dev
 

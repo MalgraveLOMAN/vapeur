@@ -1,0 +1,9 @@
+<h1>Liste des jeux</h1>
+
+<ul>
+    {{#each game}}
+        <li>
+            <a href="/games/{{id}}">{{title}}</a>
+        </li>
+    {{/each}}
+</ul>
