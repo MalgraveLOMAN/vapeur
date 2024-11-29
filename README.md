@@ -14,3 +14,4 @@ Dev Only :
 If changes on data base are needed : 
 npx prisma migrate dev --name init
 Seed : npx prisma db seed (soon obsolete)
+Reset Db : npx prisma migrate reset

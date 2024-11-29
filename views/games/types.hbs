@@ -1,0 +1,11 @@
+<h1>Liste des Types de Jeux</h1>
+
+<ul>
+  {{#each types}}
+    <li>
+      {{type}}
+      {{description}}
+      <a href="/games/type/{{id}}">Voir les jeux associés</a> <!-- Lien vers une page avec les détails du type -->
+    </li>
+  {{/each}}
+</ul>
