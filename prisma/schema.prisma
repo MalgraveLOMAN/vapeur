@@ -13,18 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model TypeEnum {
-  id   Int    @id @default(autoincrement())
-  type String @unique
-  types Type[]
-}
-
 model Type {
   id          Int      @id @default(autoincrement())
-  name        Int      @unique
-  description String
+  type        String      @unique
+  description String   @unique
   games       Game[]
-  typeEnum    TypeEnum @relation(fields: [name], references: [id])
 }
 
 model Editor {
