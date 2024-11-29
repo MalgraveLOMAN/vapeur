@@ -21,5 +21,8 @@
   },
   "prisma": {
     "seed": "node prisma/seed.js"
+  },
+  "nodemonConfig" : {
+    "ext" : "js,mjs,cjs,json,hbs"
   }
 }

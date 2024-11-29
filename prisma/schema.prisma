@@ -15,7 +15,7 @@ datasource db {
 
 model Type {
   id          Int      @id @default(autoincrement())
-  type        String      @unique
+  type        String   @unique
   description String   @unique
   games       Game[]
 }
@@ -33,6 +33,7 @@ model Game {
   releaseDate DateTime
   typeId      Int
   editorId    Int
+  FrontPage   Boolean  @default(false)
   type        Type     @relation(fields: [typeId], references: [id])
   editor      Editor   @relation(fields: [editorId], references: [id])
 }

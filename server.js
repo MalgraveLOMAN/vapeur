@@ -7,8 +7,12 @@ const prisma = new PrismaClient();
 const bodyParser = require("body-parser");
 
 
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "views"));
+hbs.registerPartials(path.join(__dirname, "views", "partials"));
 
-app.use(express.static(__dirname + '/'));
+//app.use(express.static(__dirname + '/'));
+app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {

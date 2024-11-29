@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
+    await prisma.Type.deleteMany();
     await prisma.Type.createMany({
         data: [
             { type: 'NOTSET', description: 'Genre non renseigné' },
@@ -12,6 +13,16 @@ async function main() {
             { type: 'Sport', description: 'Simulation de compétitions sportives.' },
             { type: 'MMORPG', description: 'Jeu de rôle en ligne avec de nombreux joueurs dans un monde persistant.' },
         ],
+    });
+    await prisma.Editor.createMany({
+        data : [
+            //{name:""},
+        ],
+    });
+    await prisma.Game.createMany({
+        data: [
+        //{tile :"", description:"",releaseDate:"",typeId:"", editorId:""},
+        ]
     });
 }
 
