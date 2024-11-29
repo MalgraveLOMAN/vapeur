@@ -14,26 +14,18 @@ datasource db {
 }
 
 model TypeEnum {
-  id          Int     @id @default(autoincrement())
-  type String
+  id   Int    @id @default(autoincrement())
+  type String @unique
+  types Type[]
 }
 
-/*
-  Action
-  Aventure
-  RPG
-  Simulation
-  Sport
-  MMORPG
-*/
 model Type {
-  id          Int     @id @default(autoincrement())
-  name        TypeEnum
+  id          Int      @id @default(autoincrement())
+  name        Int      @unique
   description String
   games       Game[]
+  typeEnum    TypeEnum @relation(fields: [name], references: [id])
 }
-
-
 
 model Editor {
   id    Int    @id @default(autoincrement())
