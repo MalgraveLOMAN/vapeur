@@ -39,25 +39,125 @@ async function CheckInsert() {
         await prisma.$disconnect();
     }
 }
+async function DataTests() {
+    const games = await prisma.Game.findMany();
+    const editors = await prisma.Editor.findMany();
+
+    if (editors.length > 0) {
+        return;
+    }
+
+    try {
+        await prisma.Editor.createMany({
+            data: [
+                { name: 'Nintendo' },
+                { name: 'RiotGames' },
+                { name: 'NaughtyDog' },
+            ],
+        });
+
+        const types = await prisma.Type.findMany();
+
+        const typeNotSet = await types.find(type => type.type === 'NOTSET');
+        const typeAction = await types.find(type => type.type === 'Action');
+        const typeAventure = await types.find(type => type.type === 'Aventure');
+        const typeRPG = await types.find(type => type.type === 'RPG');
+        const typeSimulation = await types.find(type => type.type === 'Simulation');
+        const typeSport = await types.find(type => type.type === 'Sport');
+        const typeMMORPG = await types.find(type => type.type === 'MMORPG');
+
+        if (games.length > 0) {
+            return;
+        }
+        await prisma.Game.createMany({
+            data: [
+                {
+                    title: 'The Legend of Zelda: Breath of the Wild',
+                    description: 'Un jeu d\'aventure où le joueur explore un monde ouvert.',
+                    releaseDate: new Date('2017-03-03'),
+                    typeId: typeAv-enture.id,
+                    editorId: (await prisma.Editor.findUnique({ where: { name: 'Nintendo' } })).id,
+                },
+                {
+                    title: 'Super Mario Odyssey',
+                    description: 'Un jeu de plateforme en 3D où Mario doit sauver Princess Peach.',
+                    releaseDate: new Date('2017-10-27'),
+                    typeId: typeAction.id,
+                    editorId: (await prisma.Editor.findUnique({ where: { name: 'Nintendo' } })).id,
+                },
+                {
+                    title: 'League of Legends',
+                    description: 'Un jeu de type MOBA où deux équipes s’affrontent pour détruire la base ennemie.',
+                    releaseDate: new Date('2009-10-27'),
+                    typeId: typeMMORPG.id,
+                    editorId: (await prisma.Editor.findUnique({ where: { name: 'RiotGames' } })).id,
+                },
+                {
+                    title: 'Valorant',
+                    description: 'Un jeu de tir tactique où chaque personnage possède des capacités uniques.',
+                    releaseDate: new Date('2020-06-02'),
+                    typeId: typeAction.id,
+                    editorId: (await prisma.Editor.findUnique({ where: { name: 'RiotGames' } })).id,
+                },
+                {
+                    title: 'The Last of Us Part II',
+                    description: 'Un jeu d\'action-aventure dans un monde post-apocalyptique.',
+                    releaseDate: new Date('2020-06-19'),
+                    typeId: typeRPG.id,
+                    editorId: (await prisma.Editor.findUnique({ where: { name: 'NaughtyDog' } })).id,
+                },
+                {
+                    title: 'Uncharted 4: A Thief\'s End',
+                    description: 'Un jeu d\'aventure avec des énigmes et des combats intenses.',
+                    releaseDate: new Date('2016-05-10'),
+                    typeId: typeAction.id,
+                    editorId: (await prisma.Editor.findUnique({ where: { name: 'NaughtyDog' } })).id,
+                },
+            ],
+        });
+    } catch (error) {
+        console.error('Erreur lors de l\'insertion des données de test:', error);
+    } finally {
+        console.log('Insertion des données de test terminée');
+    }
+}
+
 
 app.get("/", async (req, res) => {
     const games = await prisma.Game.findMany({
         where: {
-            FrontPage : true,
+            FrontPage: true,
         },
     });
     res.render("games/index", {
         games,
     });
 });
-app.get("/types", async (req, res)=> {
+app.get("/types", async (req, res) => {
     const types = await prisma.Type.findMany();
     console.log(types)
     res.render("games/types", {
         types,
     });
 });
+
+app.get("/games/type/:id", async (req, res) => {
+    const { id } = req.params;
+    const type = await prisma.Type.findUnique({
+        where: { id: parseInt(id) },
+        include: { games: true },
+    });
+
+    if (!type) {
+        return res.status(404).send("Type non trouvé");
+    }
+    res.render("games/GameType", {
+        type,
+    });
+});
+
 CheckInsert();
+DataTests();
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
