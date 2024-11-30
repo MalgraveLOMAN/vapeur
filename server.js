@@ -135,6 +135,13 @@ hbs.registerHelper('getYear', function (date) {
 //                                              //
 //////////////////////////////////////////////////
 
+//////////////////////////////////////////////////
+//                                              //
+//      A Faire : Gérer les Dates Niveau server //
+//     voir route /                             //
+//                                              //
+//////////////////////////////////////////////////
+
 // Notes :
 // Optimisations possibles : 
 // Répétition de code gameType.hbs, gameList.hbs,index.hbs => Faire un seul fichier qui prends en compte les 3
@@ -148,6 +155,9 @@ app.get("/", async (req, res) => {
             type: true,
             editor: true,
         },
+    });
+    games.forEach(game => {
+        game.releaseDate = game.releaseDate.getFullYear();
     });
     res.render("games/index", {
         games,
