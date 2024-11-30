@@ -1,13 +1,26 @@
-<h1>Liste des jeux En avant</h1>
 
-<ul>
+<section class="game-slide">
+{{#each games}}
+<div class="game-item-slide">
+    <span class="game-title"><a href="/games/{{id}}">{{title}}</a></span>
+    <span class="game-description">{{description}}</span>
+    <span class="game-release-date">{{getYear releaseDate}}</span>
+    <span class="game-type"><a href="/games/type/{{type.id}}">{{type.type}}</a></span>
+    <span class="game-editor"><a href="/games/editor/{{editor.id}}">{{editor.name}}</a></span>
+</div>
+{{/each}}
+<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+<a class="next" onclick="plusSlides(1)">&#10095;</a>
+</section>
+<section class="game-list">
+    <h1>Liste des jeux En avant</h1>
     {{#each games}}
-    <li>
-        <a href="games/{{id}}">{{title}}</a>
-        - {{description}}
-        - {{releaseDate}}
-        - <a href="/games/type/{{type.id}}">{{type.type}}</a>
-        - <a href="/games/editor/{{editor.id}}">{{editor.name}}</a>
-    </li>
+    <div class="game-item">
+        <span class="game-title"><a href="/games/{{id}}">{{title}}</a></span>
+        <span class="game-description">{{description}}</span>
+        <span class="game-release-date">{{getYear releaseDate}}</span>
+        <span class="game-type"><a href="/games/type/{{type.id}}">{{type.type}}</a></span>
+        <span class="game-editor"><a href="/games/editor/{{editor.id}}">{{editor.name}}</a></span>
+    </div>
     {{/each}}
-</ul>
+</section>

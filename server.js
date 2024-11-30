@@ -122,6 +122,13 @@ async function DataTests() {
     }
 }
 
+//Helper pour changer le type des dates (ici en année)
+//Utilisation dans .hbs : {{getYear Date}}
+hbs.registerHelper('getYear', function (date) {
+    const year = new Date(date).getFullYear();
+    return year;
+});
+
 //////////////////////////////////////////////////
 //                                              //
 //      A Faire : Gérer les jointures !!!!      //
