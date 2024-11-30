@@ -131,7 +131,6 @@ async function DataTests() {
 // Notes :
 // Optimisations possibles : 
 // Répétition de code gameType.hbs, gameList.hbs,index.hbs => Faire un seul fichier qui prends en compte les 3
-
 //Afficher index.hbs (Liste des jeux mis en avant)
 app.get("/", async (req, res) => {
     const games = await prisma.Game.findMany({
@@ -220,7 +219,7 @@ app.get("/games/editor/:id", async (req, res) => {
         include: {
             games: {
                 include: {
-                    type: true, // Inclure les types des jeux
+                    type: true,
                 },
             },
         },
