@@ -20,7 +20,7 @@
   "devDependencies": {
     "nodemon": "^3.1.7"
   },
-  "nodemonConfig" : {
-    "ext" : "js,mjs,cjs,json,hbs"
+  "nodemonConfig": {
+    "ext": "js,mjs,cjs,json,hbs"
   }
 }

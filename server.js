@@ -75,7 +75,7 @@ async function DataTests() {
                     title: 'The Legend of Zelda: Breath of the Wild',
                     description: 'Un jeu d\'aventure où le joueur explore un monde ouvert.',
                     releaseDate: new Date('2017-03-03'),
-                    typeId: typeAv-enture.id,
+                    typeId: typeAv - enture.id,
                     editorId: (await prisma.Editor.findUnique({ where: { name: 'Nintendo' } })).id,
                 },
                 {
@@ -122,42 +122,121 @@ async function DataTests() {
     }
 }
 
+//////////////////////////////////////////////////
+//                                              //
+//      A Faire : Gérer les jointures !!!!      //
+//                                              //
+//////////////////////////////////////////////////
 
+// Notes :
+// Optimisations possibles : 
+// Répétition de code gameType.hbs, gameList.hbs,index.hbs => Faire un seul fichier qui prends en compte les 3
+
+//Afficher index.hbs (Liste des jeux mis en avant)
 app.get("/", async (req, res) => {
     const games = await prisma.Game.findMany({
         where: {
             FrontPage: true,
+        },
+        include: {
+            type: true,
+            editor: true,
         },
     });
     res.render("games/index", {
         games,
     });
 });
+
+//Afficher types.hbs (Liste des genres de jeux)
 app.get("/types", async (req, res) => {
     const types = await prisma.Type.findMany();
-    console.log(types)
-    res.render("games/types", {
+    res.render("types/typeList", {
         types,
     });
 });
 
+//Afficher gameType.hbs (Liste des jeux d'un même genre)
 app.get("/games/type/:id", async (req, res) => {
     const { id } = req.params;
-    const type = await prisma.Type.findUnique({
-        where: { id: parseInt(id) },
-        include: { games: true },
-    });
 
-    if (!type) {
-        return res.status(404).send("Type non trouvé");
-    }
-    res.render("games/GameType", {
-        type,
+    const types = await prisma.Type.findUnique({
+        where: { id: parseInt(id) },
+        include: {
+            games: {
+                include: {
+                    editor: true,
+                },
+            },
+        },
+    });
+    res.render("types/gameType", {
+        types,
     });
 });
 
+
+//Afficher gameList.hbs (Liste de tous les jeux)
+app.get("/games", async (req, res) => {
+    const games = await prisma.Game.findMany({
+        include: {
+            type: true,
+            editor: true,
+        },
+    });
+    res.render("games/gameList", {
+        games,
+    });
+})
+
+//Afficher games.hbs (Un seul seul)
+app.get("/games/:id", async (req, res) => {
+    const { id } = req.params;
+    const games = await prisma.Game.findUnique({
+        where: { id: parseInt(id) },
+        include: {
+            type: true,
+            editor: true,
+        },
+    });
+    res.render("games/games", {
+        games,
+    });
+});
+
+//Afficher les editoList.hbs (La liste de tous les éditeurs de jeux)
+app.get("/editors", async (req, res) => {
+    const editors = await prisma.Editor.findMany();
+    res.render("editors/editorList", {
+        editors,
+    });
+})
+
+//Afficher gameEditor.hbs (La liste des jeux édités par un édituer)
+app.get("/games/editor/:id", async (req, res) => {
+    const { id } = req.params;
+    const editor = await prisma.Editor.findUnique({
+        where: { id: parseInt(id) },
+        include: {
+            games: {
+                include: {
+                    type: true, // Inclure les types des jeux
+                },
+            },
+        },
+    });
+    res.render("editors/gameEditor.hbs", {
+        editor,
+    });
+});
+
+
+//Vérifier si les genres de jeux existent ou non, si non alors les insérer dans la base de données
 CheckInsert();
+//Insérer un sample de données pour effectuer des tests
 DataTests();
+
+//Mettre le serveur en mode écoute
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

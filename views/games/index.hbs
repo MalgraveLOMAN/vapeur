@@ -1,9 +1,13 @@
-<h1>Liste des jeux</h1>
+<h1>Liste des jeux En avant</h1>
 
 <ul>
-    {{#each game}}
-        <li>
-            <a href="/games/{{id}}">{{title}}</a>
-        </li>
+    {{#each games}}
+    <li>
+        <a href="games/{{id}}">{{title}}</a>
+        - {{description}}
+        - {{releaseDate}}
+        - <a href="/games/type/{{type.id}}">{{type.type}}</a>
+        - <a href="/games/editor/{{editor.id}}">{{editor.name}}</a>
+    </li>
     {{/each}}
 </ul>

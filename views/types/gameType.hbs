@@ -1,0 +1,16 @@
+<h1>{{types.type}} Games</h1>
+
+<p>Description : {{type.description}}</p>
+
+<h2>Liste des Jeux :</h2>
+<ul>
+  {{#each types.games}}
+  <li>
+    <a href="/games/{{id}}">{{title}}</a>
+    - {{description}}
+    - {{releaseDate}}
+    - <a href="/games/type/{{../types.id}}">{{../types.type}}</a>
+    - <a href="/games/editor/{{editor.id}}">{{editor.name}}</a>
+  </li>
+  {{/each}}
+</ul>
