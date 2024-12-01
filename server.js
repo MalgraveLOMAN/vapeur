@@ -122,7 +122,7 @@ async function DataTests() {
     }
 }
 
-//Afficher les jeux en mis en avant sur la page principale
+//Afficher les jeux en mis en avant sur la page principale index.hbs
 app.get("/", async (req, res) => {
     const games = await prisma.Game.findMany({
         where: {
@@ -141,7 +141,7 @@ app.get("/", async (req, res) => {
     });
 });
 
-//Afficher types.hbs (Liste des genres de jeux)
+//Afficher listType.hbs (Liste des genres de jeux)
 app.get("/types", async (req, res) => {
     const types = await prisma.Type.findMany();
     res.render("types/listTypes", {
@@ -149,7 +149,7 @@ app.get("/types", async (req, res) => {
     });
 });
 
-//Afficher gameType.hbs (Liste des jeux d'un même genre)
+//Afficher gamesByType.hbs (Liste des jeux d'un même genre)
 app.get("/games/type/:id", async (req, res) => {
     const { id } = req.params;
 
@@ -172,7 +172,7 @@ app.get("/games/type/:id", async (req, res) => {
 });
 
 
-//Afficher gameList.hbs (Liste de tous les jeux)
+//Afficher listGames.hbs (Liste de tous les jeux)
 app.get("/games", async (req, res) => {
     const games = await prisma.Game.findMany({
         include: {
@@ -188,7 +188,7 @@ app.get("/games", async (req, res) => {
     });
 })
 
-//Afficher games.hbs (Un seul seul)
+//Afficher gameDetails.hbs (Un seul seul)
 app.get("/games/:id", async (req, res) => {
     const { id } = req.params;
     const games = await prisma.Game.findUnique({
@@ -205,7 +205,7 @@ app.get("/games/:id", async (req, res) => {
     });
 });
 
-//Afficher les editoList.hbs (La liste de tous les éditeurs de jeux)
+//Afficher les listEditors.hbs (La liste de tous les éditeurs de jeux)
 app.get("/editors", async (req, res) => {
     const editors = await prisma.Editor.findMany();
     res.render("editors/listEditors", {
@@ -213,7 +213,7 @@ app.get("/editors", async (req, res) => {
     });
 })
 
-//Afficher gameEditor.hbs (La liste des jeux édités par un édituer)
+//Afficher gamesByEditor.hbs (La liste des jeux édités par un édituer)
 app.get("/games/editor/:id", async (req, res) => {
     const { id } = req.params;
     const editor = await prisma.Editor.findUnique({
