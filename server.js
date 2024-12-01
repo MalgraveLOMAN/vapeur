@@ -144,7 +144,7 @@ app.get("/", async (req, res) => {
 //Afficher types.hbs (Liste des genres de jeux)
 app.get("/types", async (req, res) => {
     const types = await prisma.Type.findMany();
-    res.render("types/typeList", {
+    res.render("types/listTypes", {
         types,
     });
 });
@@ -166,7 +166,7 @@ app.get("/games/type/:id", async (req, res) => {
     types.games.forEach(game => {
         game.releaseDate = game.releaseDate.getFullYear();
     });
-    res.render("types/gameType", {
+    res.render("types/gamesByType", {
         types,
     });
 });
@@ -183,7 +183,7 @@ app.get("/games", async (req, res) => {
     games.forEach(game => {
         game.releaseDate = game.releaseDate.getFullYear();
     });
-    res.render("games/gameList", {
+    res.render("games/listGames", {
         games,
     });
 })
@@ -200,7 +200,7 @@ app.get("/games/:id", async (req, res) => {
     });
     games.releaseDate = games.releaseDate.getFullYear();
     
-    res.render("games/games", {
+    res.render("games/gameDetails", {
         games,
     });
 });
@@ -208,7 +208,7 @@ app.get("/games/:id", async (req, res) => {
 //Afficher les editoList.hbs (La liste de tous les éditeurs de jeux)
 app.get("/editors", async (req, res) => {
     const editors = await prisma.Editor.findMany();
-    res.render("editors/editorList", {
+    res.render("editors/listEditors", {
         editors,
     });
 })
@@ -229,7 +229,7 @@ app.get("/games/editor/:id", async (req, res) => {
     editor.games.forEach(game => {
         game.releaseDate = game.releaseDate.getFullYear();
     });
-    res.render("editors/gameEditor.hbs", {
+    res.render("editors/gamesByEditor.hbs", {
         editor,
     });
 });
