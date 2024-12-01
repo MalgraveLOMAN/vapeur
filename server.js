@@ -1,12 +1,18 @@
+//Imports
+
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const bodyParser = require("body-parser");
 const hbs = require("hbs");
+const path = require('path')
 
+//App creation
 const prisma = new PrismaClient();
 const app = express();
 const PORT = 3000;
-const path = require('path')
+
+
+//Server & Handlebars config
 
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
@@ -15,6 +21,9 @@ hbs.registerPartials(path.join(__dirname, "views", "partials"));
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
+//Data Creation & Data Check
 
 async function CheckInsert() {
     try {
@@ -122,6 +131,23 @@ async function DataTests() {
     }
 }
 
+//Vérifier si les genres de jeux existent ou non, si non alors les insérer dans la base de données
+CheckInsert();
+//Insérer un sample de données pour effectuer des tests
+DataTests();
+
+
+//////////////////
+//              //
+//    C R U D   //
+//              //
+//////////////////
+
+//Create Data Section
+
+
+//Read Data Section
+
 //Afficher les jeux en mis en avant sur la page principale index.hbs
 app.get("/", async (req, res) => {
     const games = await prisma.Game.findMany({
@@ -199,7 +225,7 @@ app.get("/games/:id", async (req, res) => {
         },
     });
     games.releaseDate = games.releaseDate.getFullYear();
-    
+
     res.render("games/gameDetails", {
         games,
     });
@@ -234,11 +260,19 @@ app.get("/games/editor/:id", async (req, res) => {
     });
 });
 
+//Update Data Section
 
-//Vérifier si les genres de jeux existent ou non, si non alors les insérer dans la base de données
-CheckInsert();
-//Insérer un sample de données pour effectuer des tests
-DataTests();
+
+//Delete Data Section
+
+
+//////////////////////
+//                  //
+//   A faire : 404  //
+//                  //
+//////////////////////
+
+
 
 //Mettre le serveur en mode écoute
 app.listen(PORT, () => {
