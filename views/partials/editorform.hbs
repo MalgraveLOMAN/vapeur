@@ -1,0 +1,13 @@
+<section class="menu">
+  <button class="open-button" onclick="openForm('editor-form')">Ajouter un éditeur</button>
+  <div class="form-popup" id="editor-form">
+    <form action="/" class="form-container">
+      <h1>Ajouter un Editeur</h1>
+      <label for="game-editor-name"><b>Nom de l'éditeur</b></label>
+      <input type="text" placeholder="Entrez le nom de l'éditeur" id="game-editor-name" name="game-editor-name"
+        required>
+      <button type="submit" class="btn">Ajouter un editeur</button>
+      <button type="button" class="btn cancel" onclick="closeForm('editor-form')">Close</button>
+    </form>
+  </div>
+</section>

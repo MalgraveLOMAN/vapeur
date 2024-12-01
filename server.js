@@ -122,30 +122,7 @@ async function DataTests() {
     }
 }
 
-//Helper pour changer le type des dates (ici en année)
-//Utilisation dans .hbs : {{getYear Date}}
-hbs.registerHelper('getYear', function (date) {
-    const year = new Date(date).getFullYear();
-    return year;
-});
-
-//////////////////////////////////////////////////
-//                                              //
-//      A Faire : Gérer les jointures !!!!      //
-//                                              //
-//////////////////////////////////////////////////
-
-//////////////////////////////////////////////////
-//                                              //
-//      A Faire : Gérer les Dates Niveau server //
-//     voir route /                             //
-//                                              //
-//////////////////////////////////////////////////
-
-// Notes :
-// Optimisations possibles : 
-// Répétition de code gameType.hbs, gameList.hbs,index.hbs => Faire un seul fichier qui prends en compte les 3
-//Afficher index.hbs (Liste des jeux mis en avant)
+//Afficher les jeux en mis en avant sur la page principale
 app.get("/", async (req, res) => {
     const games = await prisma.Game.findMany({
         where: {
@@ -186,6 +163,9 @@ app.get("/games/type/:id", async (req, res) => {
             },
         },
     });
+    types.games.forEach(game => {
+        game.releaseDate = game.releaseDate.getFullYear();
+    });
     res.render("types/gameType", {
         types,
     });
@@ -199,6 +179,9 @@ app.get("/games", async (req, res) => {
             type: true,
             editor: true,
         },
+    });
+    games.forEach(game => {
+        game.releaseDate = game.releaseDate.getFullYear();
     });
     res.render("games/gameList", {
         games,
@@ -215,6 +198,8 @@ app.get("/games/:id", async (req, res) => {
             editor: true,
         },
     });
+    games.releaseDate = games.releaseDate.getFullYear();
+    
     res.render("games/games", {
         games,
     });
@@ -240,6 +225,9 @@ app.get("/games/editor/:id", async (req, res) => {
                 },
             },
         },
+    });
+    editor.games.forEach(game => {
+        game.releaseDate = game.releaseDate.getFullYear();
     });
     res.render("editors/gameEditor.hbs", {
         editor,

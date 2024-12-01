@@ -1,0 +1,12 @@
+<section class="menu">
+    <button class="open-button" onclick="openForm('game-form')">Ajouter un jeu</button>
+    <div class="form-popup" id="game-form">
+        <form action="/" class="form-container">
+            <h1>Ajouter un Jeu</h1>
+            <label for="game-title"><b>Titre du jeu</b></label>
+            <input type="text" placeholder="Entrez le titre du jeu" id="game-title" name="game-title" required>
+            <button type="submit" class="btn">Ajouter un jeu</button>
+            <button type="button" class="btn cancel" onclick="closeForm('game-form')">Close</button>
+        </form>
+    </div>
+</section>

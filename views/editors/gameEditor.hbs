@@ -1,12 +1,11 @@
 <section class="game-list">
+  <!--
+  https://stackoverflow.com/questions/11523331/passing-variables-through-handlebars-partial
+  Ajout d'un paramètre à un include handlebars
+  -->
+  {{> gameCarousel games=editor.games}}
+
   <h1>Liste des jeux de {{editor.name}}</h1>
-  {{#each editor.games}}
-  <div class="game-item">
-     <span class="game-title"><a href="/games/{{id}}">{{title}}</a></span>
-        <span class="game-description">{{description}}</span>
-        <span class="game-release-date">{{getYear releaseDate}}</span>
-        <span class="game-type"><a href="/games/type/{{type.id}}">{{type.type}}</a></span>
-        <span class="game-editor"><a href="/games/editor/{{editor.id}}">{{editor.name}}</a></span>
-  </div>
-  {{/each}}
+  {{>gamelistsection games=editor.games}}
+
 </section>
