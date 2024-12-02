@@ -1,5 +1,11 @@
+/*
+RENDRE LE TOUT RESPONSIVE
+*/
+
 * {
     box-sizing: border-box;
+    text-decoration: none;
+
 }
 
 .game-slide {
@@ -8,6 +14,7 @@
     margin: auto;
     overflow: hidden;
 }
+
 .game-list {
     max-width: 1000px;
     position: relative;
@@ -24,8 +31,16 @@
     border-radius: 5px;
 }
 
+.game-form {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    padding: 20px;
+}
+
 .game-item {
-    display:block;
+    aspect-ratio: 1;
+    display: block;
     text-align: center;
     padding: 20px;
     background: #f4f4f4;
@@ -47,7 +62,8 @@
     margin: 5px 0;
 }
 
-.prev, .next {
+.prev,
+.next {
     cursor: pointer;
     position: absolute;
     top: 50%;
@@ -64,11 +80,11 @@
     border-radius: 3px 0 0 3px;
 }
 
-  .form-popup {
+.form-popup {
     display: none;
-  }
-  
-  .menu-container {
+}
+
+.menu-container {
     display: flex;
-  
-  }
+
+}
