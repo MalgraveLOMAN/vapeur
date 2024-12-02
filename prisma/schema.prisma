@@ -23,6 +23,7 @@ model Type {
 model Editor {
   id    Int    @id @default(autoincrement())
   name  String @unique
+  description String
   active Boolean @default(true)
   games Game[]
 }

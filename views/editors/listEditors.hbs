@@ -1,7 +1,11 @@
-<h1>Liste des Editeurs :</h1>
+<h1>Liste des Éditeurs :</h1>
 
 <ul>
-  {{#each editors}}
-  <li><a href="/games/editor/{{id}}">{{name}}</a></li>
+  {{#each a_editors}}
+    {{#if active}}
+      <li><a href="/games/editor/{{id}}">{{name}}</a></li>
+    {{else}}
+      <li><strike><a href="/404">{{name}}</a></strike></li>
+    {{/if}}
   {{/each}}
 </ul>
