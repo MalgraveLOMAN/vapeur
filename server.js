@@ -37,6 +37,7 @@ app.use(async (req, res, next) => {
     }
 });
 
+//Renvoyer les dates sous un format YYYY
 function formatGameDates(games) {
     games.forEach(game => {
         if (game.releaseDate instanceof Date) {
