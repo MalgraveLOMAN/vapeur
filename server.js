@@ -163,6 +163,7 @@ app.get("/", async (req, res) => {
         game.releaseDate = game.releaseDate.getFullYear();
     });
     res.render("games/index", {
+        title: "Vapeur - Home page",
         games,
     });
 });
@@ -171,6 +172,7 @@ app.get("/", async (req, res) => {
 app.get("/types", async (req, res) => {
     const types = await prisma.Type.findMany();
     res.render("types/listTypes", {
+        title: "Vapeur - Game Types",
         types,
     });
 });
@@ -193,10 +195,10 @@ app.get("/games/type/:id", async (req, res) => {
         game.releaseDate = game.releaseDate.getFullYear();
     });
     res.render("types/gamesByType", {
+        title: `Vapeur - ${types.type}`,
         types,
     });
 });
-
 
 //Afficher listGames.hbs (Liste de tous les jeux)
 app.get("/games", async (req, res) => {
@@ -210,6 +212,7 @@ app.get("/games", async (req, res) => {
         game.releaseDate = game.releaseDate.getFullYear();
     });
     res.render("games/listGames", {
+        title : "Vapeur - All Games",
         games,
     });
 })
@@ -227,6 +230,7 @@ app.get("/games/:id", async (req, res) => {
     games.releaseDate = games.releaseDate.getFullYear();
 
     res.render("games/gameDetails", {
+        title : `Vapeur - ${games.title}`,
         games,
     });
 });
@@ -235,6 +239,7 @@ app.get("/games/:id", async (req, res) => {
 app.get("/editors", async (req, res) => {
     const editors = await prisma.Editor.findMany();
     res.render("editors/listEditors", {
+        tilte : "Vapeur - Editors",
         editors,
     });
 })
@@ -256,6 +261,7 @@ app.get("/games/editor/:id", async (req, res) => {
         game.releaseDate = game.releaseDate.getFullYear();
     });
     res.render("editors/gamesByEditor.hbs", {
+        title: `Vapeur - ${editor.name}`,
         editor,
     });
 });
