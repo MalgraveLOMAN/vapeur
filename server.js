@@ -1,27 +1,50 @@
-//Imports
-
+// Imports
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const bodyParser = require("body-parser");
 const hbs = require("hbs");
-const path = require('path')
+const path = require("path");
 
-//App creation
+// App creation
 const prisma = new PrismaClient();
 const app = express();
 const PORT = 3000;
 
-
-//Server & Handlebars config
-
+// Server & Handlebars config
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 hbs.registerPartials(path.join(__dirname, "views", "partials"));
 
-
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//Gestion des menu déroulant des fomulaires, ajout global à la réponse de requête
+//Si types et editors sont vide alors, le récupérer dans la bdd, sinon, juste assigner à res.locals.type
+//https://www.geeksforgeeks.org/express-js-res-locals-property/
+let TypesEditorObject = { types: null, editors: null };
+app.use(async (req, res, next) => {
+    try {
+        if (!TypesEditorObject.types || !TypesEditorObject.editors) {
+            TypesEditorObject.types = await prisma.Type.findMany();
+            TypesEditorObject.editors = await prisma.Editor.findMany();
+        }
+        res.locals.types = TypesEditorObject.types;
+        res.locals.editors = TypesEditorObject.editors;
+        next();
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+function formatGameDates(games) {
+    games.forEach(game => {
+        if (game.releaseDate instanceof Date) {
+            game.releaseDate = game.releaseDate.getFullYear();
+        }
+    });
+    return games;
+}
 
 //Data Creation & Data Check
 
@@ -136,32 +159,29 @@ CheckInsert();
 //Insérer un sample de données pour effectuer des tests
 DataTests();
 
-
 //////////////////
 //              //
 //    C R U D   //
 //              //
 //////////////////
 
-//Create Data Section
+// Create Data Section
 
-app.post('/gameCreate', function (req, res) {
+app.post("/gameCreate", function (req, res) {
     console.log(req.body);
-    const referer = req.get('referer');
-    
+    const referer = req.get("referer");
     res.redirect(referer);
 });
 
-app.post('/editorCreate', function (req, res) {
+app.post("/editorCreate", function (req, res) {
     console.log(req.body);
-    const referer = req.get('referer');
-    
+    const referer = req.get("referer");
     res.redirect(referer);
 });
 
-//Read Data Section
+// Read Data Section
 
-//Afficher les jeux en mis en avant sur la page principale index.hbs
+// Afficher les jeux mis en avant sur la page principale index.hbs
 app.get("/", async (req, res) => {
     const games = await prisma.Game.findMany({
         where: {
@@ -172,21 +192,14 @@ app.get("/", async (req, res) => {
             editor: true,
         },
     });
-    const types = await prisma.Type.findMany();
-    const editors = await prisma.Editor.findMany();
-    games.forEach(game => {
-        game.releaseDate = game.releaseDate.getFullYear();
-    });
-    
+    formatGameDates(games);
     res.render("games/index", {
         title: "Vapeur - Home page",
         games,
-        types,
-        editors,
     });
 });
 
-//Afficher listType.hbs (Liste des genres de jeux)
+// Afficher listType.hbs (Liste des genres de jeux)
 app.get("/types", async (req, res) => {
     const types = await prisma.Type.findMany();
     res.render("types/listTypes", {
@@ -195,7 +208,7 @@ app.get("/types", async (req, res) => {
     });
 });
 
-//Afficher gamesByType.hbs (Liste des jeux d'un même genre)
+// Afficher gamesByType.hbs (Liste des jeux d'un même genre)
 app.get("/games/type/:id", async (req, res) => {
     const { id } = req.params;
 
@@ -209,16 +222,14 @@ app.get("/games/type/:id", async (req, res) => {
             },
         },
     });
-    types.games.forEach(game => {
-        game.releaseDate = game.releaseDate.getFullYear();
-    });
+    formatGameDates(types.games);
     res.render("types/gamesByType", {
         title: `Vapeur - ${types.type}`,
         types,
     });
 });
 
-//Afficher listGames.hbs (Liste de tous les jeux)
+// Afficher listGames.hbs (Liste de tous les jeux)
 app.get("/games", async (req, res) => {
     const games = await prisma.Game.findMany({
         include: {
@@ -226,16 +237,14 @@ app.get("/games", async (req, res) => {
             editor: true,
         },
     });
-    games.forEach(game => {
-        game.releaseDate = game.releaseDate.getFullYear();
-    });
+    formatGameDates(games);
     res.render("games/listGames", {
-        title : "Vapeur - All Games",
+        title: "Vapeur - All Games",
         games,
     });
-})
+});
 
-//Afficher gameDetails.hbs (Un seul seul)
+// Afficher gameDetails.hbs (Détails d'un seul jeu)
 app.get("/games/:id", async (req, res) => {
     const { id } = req.params;
     const games = await prisma.Game.findUnique({
@@ -248,21 +257,21 @@ app.get("/games/:id", async (req, res) => {
     games.releaseDate = games.releaseDate.getFullYear();
 
     res.render("games/gameDetails", {
-        title : `Vapeur - ${games.title}`,
+        title: `Vapeur - ${games.title}`,
         games,
     });
 });
 
-//Afficher les listEditors.hbs (La liste de tous les éditeurs de jeux)
+// Afficher les listEditors.hbs (Liste de tous les éditeurs de jeux)
 app.get("/editors", async (req, res) => {
     const editors = await prisma.Editor.findMany();
     res.render("editors/listEditors", {
-        tilte : "Vapeur - Editors",
+        title: "Vapeur - Editors",
         editors,
     });
-})
+});
 
-//Afficher gamesByEditor.hbs (La liste des jeux édités par un édituer)
+// Afficher gamesByEditor.hbs (Liste des jeux édités par un éditeur)
 app.get("/games/editor/:id", async (req, res) => {
     const { id } = req.params;
     const editor = await prisma.Editor.findUnique({
@@ -275,20 +284,16 @@ app.get("/games/editor/:id", async (req, res) => {
             },
         },
     });
-    editor.games.forEach(game => {
-        game.releaseDate = game.releaseDate.getFullYear();
-    });
-    res.render("editors/gamesByEditor.hbs", {
+    formatGameDates(editor.games);
+    res.render("editors/gamesByEditor", {
         title: `Vapeur - ${editor.name}`,
         editor,
     });
 });
 
-//Update Data Section
+// Update Data Section
 
-
-//Delete Data Section
-
+// Delete Data Section
 
 //////////////////////
 //                  //
@@ -296,9 +301,7 @@ app.get("/games/editor/:id", async (req, res) => {
 //                  //
 //////////////////////
 
-
-
-//Mettre le serveur en mode écoute
+// Mettre le serveur en mode écoute
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
