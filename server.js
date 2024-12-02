@@ -145,7 +145,26 @@ DataTests();
 
 //Create Data Section
 
+app.post('/gameCreate', function (req, res) {
+    console.log(req.body);
+    const referer = req.get('referer');
+    
+    res.redirect(referer);
+});
 
+app.post('/editorCreate', function (req, res) {
+    console.log(req.body);
+    const referer = req.get('referer');
+    
+    res.redirect(referer);
+});
+
+app.post('/typeCreate', function (req, res) {
+    console.log(req.body);
+    const referer = req.get('referer');
+    
+    res.redirect(referer);
+});
 //Read Data Section
 
 //Afficher les jeux en mis en avant sur la page principale index.hbs

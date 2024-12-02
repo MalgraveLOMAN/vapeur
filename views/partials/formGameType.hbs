@@ -1,12 +1,23 @@
 <section class="menu">
-    <button class="open-button" onclick="openForm('game-type-form')">Ajouter genre de jeu</button>
+    <button class="open-button" onclick="openForm('game-type-form')">
+        Ajouter genre de jeu
+    </button>
+
     <div class="form-popup" id="game-type-form">
-        <form action="/" class="form-container">
+        <form action="/typeCreate" class="form-container" method="POST">
             <h1>Ajouter un genre de jeu</h1>
-            <label for="game-type"><b>Nom du genre de jeu</b></label>
-            <input type="text" placeholder="Entrez le genre de jeu" id="game-title" name="game-title" required>
-            <button type="submit" class="btn">Ajouter un type de jeu</button>
-            <button type="button" class="btn cancel" onclick="closeForm('game-type-form')">Close</button>
+
+            <div class="form-group">
+                <label for="game-type"><b>Nom du genre de jeu</b></label>
+                <input type="text" id="game-type" name="game-type" placeholder="Entrez le genre de jeu" required />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Ajouter un type de jeu</button>
+                <button type="button" class="btn cancel" onclick="closeForm('game-type-form')">
+                    Fermer
+                </button>
+            </div>
         </form>
     </div>
 </section>
