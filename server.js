@@ -159,12 +159,6 @@ app.post('/editorCreate', function (req, res) {
     res.redirect(referer);
 });
 
-app.post('/typeCreate', function (req, res) {
-    console.log(req.body);
-    const referer = req.get('referer');
-    
-    res.redirect(referer);
-});
 //Read Data Section
 
 //Afficher les jeux en mis en avant sur la page principale index.hbs
@@ -178,12 +172,17 @@ app.get("/", async (req, res) => {
             editor: true,
         },
     });
+    const types = await prisma.Type.findMany();
+    const editors = await prisma.Editor.findMany();
     games.forEach(game => {
         game.releaseDate = game.releaseDate.getFullYear();
     });
+    
     res.render("games/index", {
         title: "Vapeur - Home page",
         games,
+        types,
+        editors,
     });
 });
 

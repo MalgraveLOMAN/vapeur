@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     Carousel();
+
     document.addEventListener("click", Click);
 });
 
