@@ -1,13 +1,19 @@
 <h1>Liste des Éditeurs :</h1>
+
 <form class="editor-form">
   <ul class="editor-list">
     {{#each a_editors}}
     {{#if active}}
     <li>
-      <input type="checkbox" class="checkbox-form" id=`edtior-{{id}}`>
-      <a href="/games/editor/{{id}}">{{name}}</a>
+      <label for={{id}}>
+        <input type="checkbox" class="checkbox-editors-form" id={{id}}>
+        <a href="/games/editor/{{id}}">{{name}}</a>
+      </label>
     </li>
     {{/if}}
     {{/each}}
   </ul>
 </form>
+<div class="buttons">
+{{>ButtonDelete}}
+</div>

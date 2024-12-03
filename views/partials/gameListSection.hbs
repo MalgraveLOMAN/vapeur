@@ -1,8 +1,9 @@
+
 <form class="game-form">
   {{#each games}}
-  <label for=game-{{id}}>
+  <label for={{id}}>
   <div class="game-item">
-    <input type="checkbox" class="checkbox-form" id={{id}}>
+    <input type="checkbox" class="checkbox-game-form" id={{id}}>
     <span class="game-title"><a href="/games/{{id}}">{{title}}</a></span>
     <span class="game-description">{{description}}</span>
     <span class="game-release-date">{{releaseDate}}</span>
@@ -12,3 +13,4 @@
   </label>
   {{/each}}
 </form>
+

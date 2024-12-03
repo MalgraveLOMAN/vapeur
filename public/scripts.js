@@ -1,21 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
-    Carousel();
+    try {
+        Carousel();
+    } catch (error) {}
 
-    document.addEventListener("click", Click);
-    const games = new GameList();
+    const games = new CheckboxList("checkbox-game-form");
+    games.addListeners();
 
-    /*
-    games.GameList.addEventListener("change", e =>{
-        console.log(e);
-    });
-    */
-    games.GameList.forEach((game) => {
-        console.log(game.children[0].checked)
-    })
-    games.GameList.forEach((game) => {
-        console.log(game.children[0].id);
-    });
+    const editors = new CheckboxList("checkbox-editors-form");
+    editors.addListeners();
 });
+
 
 let openFormId = null;
 
@@ -80,33 +74,32 @@ function Click(event) {
     }
 }
 
-
-
 //https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation
 //Empêche le document de detecter les clicks sur les formulaires et les boutons (utile pour l'ouverture et la fermeture des formulaires)
 document.querySelectorAll(".form-popup, .open-button").forEach(element => {
     element.addEventListener("click", event => event.stopPropagation());
 });
 
-class GameList {
-    constructor() {
-        //this.GameList = document.querySelectorAll('.game-form .game-item');
-        this.GameChecked = [];
-        /*
-        GameList.forEach((game) => {
-            console.log(game.children[0].checked)
-        })
-        GameList.forEach((game) => {
-            console.log(game.children[0].id);
+class CheckboxList {
+    constructor(className) {
+        this.elements = Array.from(document.getElementsByClassName(className));
+        this.checkedList = []; // Utilisation d'un tableau au lieu d'un Set
+    }
+    addListeners() {
+        this.elements.forEach(element => {
+            element.addEventListener("change", () => {
+                if (this.checkedList.includes(element.id)) {
+                    // Supprime l'élément du tableau s'il est déjà dedans
+                    this.checkedList = this.checkedList.filter(id => id !== element.id);
+                } else {
+                    // Ajoute l'élément au tableau
+                    this.checkedList.push(element.id);
+                }
+                console.log(this.checkedList);
+            });
         });
-        */
-    };
-    
+    }
 }
-class EditorList {
-    constructor() {
-        this.EditorList = document.getElementsByClassName("editor-list");
 
-    };
-}
+
 
