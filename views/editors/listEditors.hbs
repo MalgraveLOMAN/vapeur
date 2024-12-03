@@ -1,11 +1,13 @@
 <h1>Liste des Éditeurs :</h1>
-
-<ul>
-  {{#each a_editors}}
+<form class="editor-form">
+  <ul class="editor-list">
+    {{#each a_editors}}
     {{#if active}}
-      <li><a href="/games/editor/{{id}}">{{name}}</a></li>
-    {{else}}
-      <li><strike><a href="/404">{{name}}</a></strike></li>
+    <li>
+      <input type="checkbox" class="checkbox-form" id=`edtior-{{id}}`>
+      <a href="/games/editor/{{id}}">{{name}}</a>
+    </li>
     {{/if}}
-  {{/each}}
-</ul>
+    {{/each}}
+  </ul>
+</form>

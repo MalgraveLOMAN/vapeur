@@ -2,6 +2,19 @@ document.addEventListener("DOMContentLoaded", () => {
     Carousel();
 
     document.addEventListener("click", Click);
+    const games = new GameList();
+
+    /*
+    games.GameList.addEventListener("change", e =>{
+        console.log(e);
+    });
+    */
+    games.GameList.forEach((game) => {
+        console.log(game.children[0].checked)
+    })
+    games.GameList.forEach((game) => {
+        console.log(game.children[0].id);
+    });
 });
 
 let openFormId = null;
@@ -67,8 +80,33 @@ function Click(event) {
     }
 }
 
+
+
 //https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation
 //Empêche le document de detecter les clicks sur les formulaires et les boutons (utile pour l'ouverture et la fermeture des formulaires)
 document.querySelectorAll(".form-popup, .open-button").forEach(element => {
     element.addEventListener("click", event => event.stopPropagation());
 });
+
+class GameList {
+    constructor() {
+        //this.GameList = document.querySelectorAll('.game-form .game-item');
+        this.GameChecked = [];
+        /*
+        GameList.forEach((game) => {
+            console.log(game.children[0].checked)
+        })
+        GameList.forEach((game) => {
+            console.log(game.children[0].id);
+        });
+        */
+    };
+    
+}
+class EditorList {
+    constructor() {
+        this.EditorList = document.getElementsByClassName("editor-list");
+
+    };
+}
+
