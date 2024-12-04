@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const actionMaps = {
+    const formActions = {
         "game-form": {
             "remove-front": "/removeFront",
             "delete": "/game/delete",
@@ -13,10 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", function (event) {
         if (event.target.tagName === "BUTTON" && event.target.type === "submit") {
             const buttonId = event.target.id;
+            //https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
             const form = event.target.closest("form");
-
-            if (form && actionMaps[form.className]) {
-                form.action = actionMaps[form.className][buttonId] || "/";
+            if (form && formActions[form.className]) {
+                form.action = formActions[form.className][buttonId];
             }
         }
     });

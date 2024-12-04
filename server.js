@@ -214,19 +214,35 @@ app.post("/gameCreate", async function (req, res) {
 app.post("/editorCreate", async function (req, res) {
     try {
         const {
-            'game-editor-name': name
+            'game-editor-name': name,
+            'game-editor-description': description
         } = req.body;
-        await prisma.editor.create({
-            data: {
-                name,
+
+        //Si l'editeur existait au paravant, alors il a déjà une description, si rien n'est renseigné dans le formulaire
+        // L'editeur reprend sa description initiale
+        const updateData = { active: true };
+        if (description) {
+            updateData.description = description;
+        }
+
+        await prisma.editor.upsert({
+            where: {
+                name: name,
             },
+            update: updateData,
+            create: {
+                name: name,
+                description: description,
+            }
         });
+
         res.redirect(req.get("referer"));
     } catch (error) {
-        console.error("An error has occured : ", error);
-        res.status(500).send("An error has occured.");
+        console.error("An error has occurred:", error);
+        res.status(500).send("An error has occurred.");
     }
 });
+
 
 // Read Data Section
 
@@ -347,23 +363,55 @@ app.get("/games/editor/:id", async (req, res) => {
 
 // Update Data Section
 
-//Enlever les games de la frontpage
 app.post("/removeFront", async (req, res) => {
-    console.log(req.body);
+    let games = req.body['game-id'];
+    games: [games];
+    for (const game of games) {
+        await prisma.Game.update({
+            where: {
+                id: parseInt(game),
+            },
+            data: {
+                FrontPage: false,
+            },
+        });
+    }
     res.redirect(req.get("referer"));
+});
 
-})
+
 //Ajouter les games de la frontpage
 app.post("/addFront", async (req, res) => {
-    console.log(req.body);
+    let games = req.body['game-id'];
+    games: [games];
+    for (const game of games) {
+        await prisma.Game.update({
+            where: {
+                id: parseInt(game),
+            },
+            data: {
+                FrontPage: true,
+            },
+        });
+    }
     res.redirect(req.get("referer"));
-
 })
 
 
 //Supprimer les editeurs
 app.post("/editor/delete", async (req, res) => {
-    console.log(req.body);
+    let editors = req.body['editor-id'];
+    editors: [editors];
+    for (const editor of editors) {
+        await prisma.Editor.update({
+            where: {
+                id: parseInt(editor),
+            },
+            data: {
+                active: false,
+            },
+        });
+    }
     res.redirect(req.get("referer"));
 })
 
@@ -371,8 +419,16 @@ app.post("/editor/delete", async (req, res) => {
 
 
 //Supprimer les games
-app.post("/games/delete", async (req, res) => {
-    console.log(req.body);
+app.post("/game/delete", async (req, res) => {
+    let games = req.body['game-id'];
+    games: [games];
+    for (const game of games) {
+        await prisma.Game.delete({
+            where: {
+                id: parseInt(game),
+            },
+        });
+    }
     res.redirect(req.get("referer"));
 })
 
