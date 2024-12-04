@@ -347,7 +347,34 @@ app.get("/games/editor/:id", async (req, res) => {
 
 // Update Data Section
 
+//Enlever les games de la frontpage
+app.post("/removeFront", async (req, res) => {
+    console.log(req.body);
+    res.redirect(req.get("referer"));
+
+})
+//Ajouter les games de la frontpage
+app.post("/addFront", async (req, res) => {
+    console.log(req.body);
+    res.redirect(req.get("referer"));
+
+})
+
+
+//Supprimer les editeurs
+app.post("/editor/delete", async (req, res) => {
+    console.log(req.body);
+    res.redirect(req.get("referer"));
+})
+
 // Delete Data Section
+
+
+//Supprimer les games
+app.post("/games/delete", async (req, res) => {
+    console.log(req.body);
+    res.redirect(req.get("referer"));
+})
 
 //////////////////////
 //                  //

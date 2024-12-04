@@ -1,17 +1,38 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+    const actionMaps = {
+        "game-form": {
+            "remove-front": "/removeFront",
+            "delete": "/game/delete",
+            "front-page": "/addFront",
+        },
+        "editor-form": {
+            "delete": "/editor/delete",
+        },
+    };
+    document.addEventListener("click", function (event) {
+        if (event.target.tagName === "BUTTON" && event.target.type === "submit") {
+            const buttonId = event.target.id;
+            const form = event.target.closest("form");
+
+            if (form && actionMaps[form.className]) {
+                form.action = actionMaps[form.className][buttonId] || "/";
+            }
+        }
+    });
+
     try {
         Carousel();
-    } catch (error) {}
-
-    const games = new CheckboxList("checkbox-game-form");
-    games.addListeners();
-
-    const editors = new CheckboxList("checkbox-editors-form");
-    editors.addListeners();
+    } catch (error) { }
 });
 
 
 let openFormId = null;
+//https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation
+//Empêche le document de detecter les clicks sur les formulaires et les boutons (utile pour l'ouverture et la fermeture des formulaires)
+document.querySelectorAll(".form-popup, .open-button").forEach(element => {
+    element.addEventListener("click", event => event.stopPropagation());
+});
 
 //https://www.w3schools.com/howto/howto_js_slideshow.asp
 //Ajout d'un carousel des jeux mis en avant
@@ -74,32 +95,6 @@ function Click(event) {
     }
 }
 
-//https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation
-//Empêche le document de detecter les clicks sur les formulaires et les boutons (utile pour l'ouverture et la fermeture des formulaires)
-document.querySelectorAll(".form-popup, .open-button").forEach(element => {
-    element.addEventListener("click", event => event.stopPropagation());
-});
-
-class CheckboxList {
-    constructor(className) {
-        this.elements = Array.from(document.getElementsByClassName(className));
-        this.checkedList = []; // Utilisation d'un tableau au lieu d'un Set
-    }
-    addListeners() {
-        this.elements.forEach(element => {
-            element.addEventListener("change", () => {
-                if (this.checkedList.includes(element.id)) {
-                    // Supprime l'élément du tableau s'il est déjà dedans
-                    this.checkedList = this.checkedList.filter(id => id !== element.id);
-                } else {
-                    // Ajoute l'élément au tableau
-                    this.checkedList.push(element.id);
-                }
-                console.log(this.checkedList);
-            });
-        });
-    }
-}
 
 
 
