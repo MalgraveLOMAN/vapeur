@@ -17,6 +17,8 @@ app.set("views", path.join(__dirname, "views"));
 hbs.registerPartials(path.join(__dirname, "views", "partials"));
 
 app.use(express.static("public"));
+app.use(express.json());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //Gestion des menu déroulant des fomulaires, ajout global à la réponse de requête
@@ -348,6 +350,14 @@ app.get("/games/editor/:id", async (req, res) => {
 // Update Data Section
 
 // Delete Data Section
+
+app.post('/delete', (req, res) => {
+    const { checkedList } = req.body; // Récupère correctement le tableau
+    console.log('Éléments à supprimer:', checkedList);
+    res.redirect(req.get("referer"));
+});
+
+  
 
 //////////////////////
 //                  //

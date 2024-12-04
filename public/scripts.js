@@ -1,13 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
     try {
         Carousel();
-    } catch (error) {}
+    } catch (error) { }
 
     const games = new CheckboxList("checkbox-game-form");
     games.addListeners();
 
     const editors = new CheckboxList("checkbox-editors-form");
     editors.addListeners();
+    document.querySelector('.button').addEventListener('click', () => {
+        deleteSelection(games.checkedList);
+    });   
 });
 
 
@@ -83,23 +86,34 @@ document.querySelectorAll(".form-popup, .open-button").forEach(element => {
 class CheckboxList {
     constructor(className) {
         this.elements = Array.from(document.getElementsByClassName(className));
-        this.checkedList = []; // Utilisation d'un tableau au lieu d'un Set
+        this.checkedList = [];
     }
     addListeners() {
         this.elements.forEach(element => {
             element.addEventListener("change", () => {
                 if (this.checkedList.includes(element.id)) {
-                    // Supprime l'élément du tableau s'il est déjà dedans
                     this.checkedList = this.checkedList.filter(id => id !== element.id);
                 } else {
-                    // Ajoute l'élément au tableau
                     this.checkedList.push(element.id);
                 }
-                console.log(this.checkedList);
             });
         });
     }
 }
 
+function deleteSelection(games) {
+    fetch('/delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify( "checkedList", games ), // Encapsuler dans un objet
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        alert('Une erreur s\'est produite.');
+    });
+}
 
 
+  
