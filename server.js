@@ -363,6 +363,7 @@ app.get("/games/editor/:id", async (req, res) => {
 
 // Update Data Section
 
+//Enlever les jeux de la front page
 app.post("/removeFront", async (req, res) => {
     let games = req.body['game-id'];
     games: [games];
@@ -379,8 +380,7 @@ app.post("/removeFront", async (req, res) => {
     res.redirect(req.get("referer"));
 });
 
-
-//Ajouter les games de la frontpage
+//Ajouter les jeux à la frontpage
 app.post("/addFront", async (req, res) => {
     let games = req.body['game-id'];
     games: [games];
@@ -417,8 +417,7 @@ app.post("/editor/delete", async (req, res) => {
 
 // Delete Data Section
 
-
-//Supprimer les games
+//Supprimer les jeux
 app.post("/game/delete", async (req, res) => {
     let games = req.body['game-id'];
     games: [games];
