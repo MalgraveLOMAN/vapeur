@@ -11,13 +11,13 @@
 
 <body>
     {{> navbar}}
+    <div class="menu-container">
+        {{>formGame editors=editors types=types}}
+        {{>formEditor}}
+    </div>
     {{{ body }}}
     {{> footer }}
-    <div class="menu-container">
-        {{>formGame}}
-        {{>formEditor}}
-        {{>formGameType}}
-    </div>
+
 </body>
 <script src="/scripts.js"></script>
 

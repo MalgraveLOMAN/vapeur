@@ -1,13 +1,25 @@
 <section class="menu">
-  <button class="open-button" onclick="openForm('editor-form')">Ajouter un éditeur</button>
+  <button class="open-button" onclick="openForm('editor-form')">
+    Ajouter un éditeur
+  </button>
+
   <div class="form-popup" id="editor-form">
-    <form action="/" class="form-container">
+    <form action="/editorCreate" class="form-container" method="POST">
       <h1>Ajouter un Editeur</h1>
-      <label for="game-editor-name"><b>Nom de l'éditeur</b></label>
-      <input type="text" placeholder="Entrez le nom de l'éditeur" id="game-editor-name" name="game-editor-name"
-        required>
-      <button type="submit" class="btn">Ajouter un editeur</button>
-      <button type="button" class="btn cancel" onclick="closeForm('editor-form')">Close</button>
+
+      <div class="form-group">
+        <label for="game-editor-name"><b>Nom de l'éditeur</b></label>
+        <input type="text" id="game-editor-name" name="game-editor-name" placeholder="Entrez le nom de l'éditeur"
+          required />
+          <input type="text" id="game-editor-description" name="game-editor-description" placeholder="Entrez la description de l'éditeur"/>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn">Ajouter un éditeur</button>
+        <button type="button" class="btn cancel" onclick="closeForm('editor-form')">
+          Fermer
+        </button>
+      </div>
     </form>
   </div>
 </section>

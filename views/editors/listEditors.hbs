@@ -1,7 +1,20 @@
-<h1>Liste des Editeurs :</h1>
+<h1>Liste des Éditeurs :</h1>
 
-<ul>
-  {{#each editors}}
-  <li><a href="/games/editor/{{id}}">{{name}}</a></li>
-  {{/each}}
-</ul>
+<form class="editor-form" method="post">
+  <ul class="editor-list">
+    {{#each a_editors}}
+    {{#if active}}
+    <li>
+      <label for={{id}}>
+        <input type="checkbox" class="checkbox-editors-form" name="editor-id" value={{id}} id={{id}}>
+        <a href="/games/editor/{{id}}">{{name}}</a>
+        <p>{{description}}</p>
+      </label>
+    </li>
+    {{/if}}
+    {{/each}}
+  </ul>
+  <div class="buttons">
+    {{>ButtonDelete}}
+  </div>
+</form>

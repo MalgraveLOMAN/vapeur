@@ -1,9 +1,38 @@
 document.addEventListener("DOMContentLoaded", () => {
-    Carousel();
-    document.addEventListener("click", Click);
+
+    const formActions = {
+        "game-form": {
+            "remove-front": "/removeFront",
+            "delete": "/game/delete",
+            "front-page": "/addFront",
+        },
+        "editor-form": {
+            "delete": "/editor/delete",
+        },
+    };
+    document.addEventListener("click", function (event) {
+        if (event.target.tagName === "BUTTON" && event.target.type === "submit") {
+            const buttonId = event.target.id;
+            //https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
+            const form = event.target.closest("form");
+            if (form && formActions[form.className]) {
+                form.action = formActions[form.className][buttonId];
+            }
+        }
+    });
+
+    try {
+        Carousel();
+    } catch (error) { }
 });
 
+
 let openFormId = null;
+//https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation
+//Empêche le document de detecter les clicks sur les formulaires et les boutons (utile pour l'ouverture et la fermeture des formulaires)
+document.querySelectorAll(".form-popup, .open-button").forEach(element => {
+    element.addEventListener("click", event => event.stopPropagation());
+});
 
 //https://www.w3schools.com/howto/howto_js_slideshow.asp
 //Ajout d'un carousel des jeux mis en avant
@@ -66,8 +95,6 @@ function Click(event) {
     }
 }
 
-//https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation
-//Empêche le document de detecter les clicks sur les formulaires et les boutons (utile pour l'ouverture et la fermeture des formulaires)
-document.querySelectorAll(".form-popup, .open-button").forEach(element => {
-    element.addEventListener("click", event => event.stopPropagation());
-});
+
+
+

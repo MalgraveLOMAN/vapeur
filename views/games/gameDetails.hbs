@@ -6,4 +6,12 @@
         <span class="game-type"><a href="/games/type/{{games.type.id}}">{{games.type.type}}</a></span>
         <span class="game-editor"><a href="/games/editor/{{games.editor.id}}">{{games.editor.name}}</a></span>
     </div>
+    <div class="buttons">
+        {{>ButtonDelete}}
+        {{#if games.FrontPage}}
+            {{>ButtonRemoveFrontPage}}
+        {{else}}
+            {{>ButtonFrontPage}}
+        {{/if}}
+    </div>
 </section>
