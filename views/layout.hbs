@@ -10,14 +10,16 @@
 </head>
 
 <body>
+    <h1 id="title">Vapeur - Mathieu Dumas & Rémi HAEN</h1>
+    <section class="page">
     {{> navbar}}
     <div class="menu-container">
         {{>formGame editors=editors types=types}}
         {{>formEditor}}
     </div>
     {{{ body }}}
+    </section>
     {{> footer }}
-
 </body>
 <script src="/scripts.js"></script>
 

@@ -260,6 +260,7 @@ app.get("/", async (req, res) => {
     formatGameDates(games);
     res.render("games/index", {
         title: "Vapeur - Home page",
+        page :{index : "active"},
         games,
     });
 });
@@ -269,6 +270,8 @@ app.get("/types", async (req, res) => {
     const types = await prisma.Type.findMany();
     res.render("types/listTypes", {
         title: "Vapeur - Game Types",
+        page :{types : "active"},
+
         types,
     });
 });
@@ -290,6 +293,7 @@ app.get("/games/type/:id", async (req, res) => {
     formatGameDates(types.games);
     res.render("types/gamesByType", {
         title: `Vapeur - ${types.type}`,
+        page :{types : "active"},
         types,
     });
 });
@@ -305,6 +309,7 @@ app.get("/games", async (req, res) => {
     formatGameDates(games);
     res.render("games/listGames", {
         title: "Vapeur - All Games",
+        page :{games : "active"},
         games,
     });
 });
@@ -323,6 +328,7 @@ app.get("/games/:id", async (req, res) => {
 
     res.render("games/gameDetails", {
         title: `Vapeur - ${games.title}`,
+        page :{games : "active"},
         games,
     });
 });
@@ -332,6 +338,7 @@ app.get("/editors", async (req, res) => {
     const a_editors = await prisma.Editor.findMany();
     res.render("editors/listEditors", {
         title: "Vapeur - Editors",
+        page :{editors : "active"},
         a_editors,
     });
 });
@@ -353,6 +360,7 @@ app.get("/games/editor/:id", async (req, res) => {
         formatGameDates(editor.games);
         res.render("editors/gamesByEditor", {
             title: `Vapeur - ${editor.name}`,
+            page :{editors : "active"},
             editor,
         });
     }

@@ -1,88 +1,48 @@
-/*
-RENDRE LE TOUT RESPONSIVE
-*/
-
-* {
-    box-sizing: border-box;
-}
-
-.game-slide {
-    max-width: 1000px;
-    position: relative;
-    margin: auto;
+#title {
+    font-size: 24px;
+    white-space: nowrap;
     overflow: hidden;
-}
-
-.game-list {
-    max-width: 1000px;
-    position: relative;
-    margin: auto;
-    overflow: hidden;
-}
-
-.game-item-slide {
-    display: none;
+    text-overflow: ellipsis;
     text-align: center;
-    padding: 20px;
-    background: #f4f4f4;
-    border: 1px solid #ddd;
-    border-radius: 5px;
 }
 
-.game-form {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    padding: 20px;
-}
-
-.game-item {
-    aspect-ratio: 1;
-    display: block;
-    text-align: center;
-    padding: 20px;
-    background: #f4f4f4;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.game-title {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.game-description,
-.game-release-date,
-.game-type,
-.game-editor {
-    display: block;
-    margin: 5px 0;
-}
-
-.prev,
-.next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    margin-top: -22px;
-    padding: 16px;
-    color: black;
-
-    user-select: none;
-}
-
-.next {
-    right: 0;
-    border-radius: 3px 0 0 3px;
-}
-
-.form-popup {
-    display: none;
-}
-
-.menu-container {
+.navbar {
     display: flex;
+    width: 100%;
+    background-color: #555;
+    overflow: hidden;
+    border-radius: 50px;
+}
 
+.navbar a {
+    padding: 12px;
+    color: white;
+    text-decoration: none;
+    font-size: 17px;
+    text-align: center;
+    flex:1;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar a:hover {
+    background-color: #000;
+    transform: scale(1.05);
+}
+
+.navbar a.active {
+    background-color: #7a7a7a;
+}
+
+
+@media (max-width: 500px) {
+    .navbar {
+        flex-direction: column;
+    }
+
+    .navbar a {
+        border-radius: 0;
+    }
+    #title {
+        font-size: 18px;
+    }
 }
