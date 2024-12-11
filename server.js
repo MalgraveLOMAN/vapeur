@@ -431,7 +431,7 @@ app.post("/game/delete", async (req, res) => {
     res.redirect(req.get("referer"));
 })
 
-//Layout : false = Ne pas utiliser le modèle par défaut du layout
+//Layout : false == Ne pas utiliser le modèle par défaut du layout
 app.use((req, res, next) => {
     res.status(404).render('404', {
         layout: false
