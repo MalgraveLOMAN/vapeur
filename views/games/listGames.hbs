@@ -2,9 +2,10 @@
 
 <section class="game-list">
     <h1>Liste des Jeux :</h1>
-    {{>gameListSection games=games}}
-    <div class="buttons">
-        {{>ButtonDelete}}
-        {{>ButtonFrontPage}}
-    </div>
+    <form class="game-form" method="post">
+        {{>gameListSection games=games}}
+        <div class="buttons">
+            {{>ButtonDelete}}
+            {{>ButtonFrontPage}}
+        </div>
 </section>

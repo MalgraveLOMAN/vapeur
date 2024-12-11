@@ -5,11 +5,13 @@
 
 <h2>Liste des Jeux :</h2>
 <section class="game-list">
+  <form class="game-form" method="post">
+
     {{>gameListSection games=types.games}}
-     <div class="buttons">
-    {{>ButtonDelete}}
-    {{>ButtonFrontPage}}
-    {{>ButtonRemoveFrontPage}}
-  </div>
-</form>
+    <div class="buttons">
+      {{>ButtonDelete}}
+      {{>ButtonFrontPage}}
+      {{>ButtonRemoveFrontPage}}
+    </div>
+  </form>
 </section>

@@ -7,11 +7,12 @@
 
   <h1>Liste des jeux de {{editor.name}}</h1>
   {{editor.description}}
-  {{>gameListSection games=editor.games}}
-  <div class="buttons">
-    {{>ButtonDelete}}
-    {{>ButtonFrontPage}}
-    {{>ButtonRemoveFrontPage}}
-  </div>
+  <form class="game-form" method="post">
+    {{>gameListSection games=editor.games}}
+    <div class="buttons">
+      {{>ButtonDelete}}
+      {{>ButtonFrontPage}}
+      {{>ButtonRemoveFrontPage}}
+    </div>
   </form>
 </section>
