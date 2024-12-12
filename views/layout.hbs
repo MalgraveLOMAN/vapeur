@@ -5,19 +5,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/global.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <title>{{title}}</title>
 
 </head>
 
 <body>
-    <h1 id="title">Vapeur - Mathieu Dumas & Rémi HAEN</h1>
+    <h1 id="title">Vapeur</h1>
     <section class="page">
-    {{> navbar}}
-    <div class="menu-container">
-        {{>formGame editors=editors types=types}}
-        {{>formEditor}}
-    </div>
-    {{{ body }}}
+        {{> navbar}}
+        
+        {{{ body }}}
+        <div class="menu-container">
+            {{>formGame editors=editors types=types}}
+            {{>formEditor}}
+        </div>
     </section>
     {{> footer }}
 </body>

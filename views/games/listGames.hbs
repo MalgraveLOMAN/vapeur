@@ -1,11 +1,11 @@
 {{> gameCarousel games=games}}
-
-<section class="game-list">
-    <h1>Liste des Jeux :</h1>
-    <form class="game-form" method="post">
-        {{>gameListSection games=games}}
-        <div class="buttons">
+<h1>Liste des Jeux :</h1>
+<form class="game-form" method="post">
+       <div class="buttons">
             {{>ButtonDelete}}
             {{>ButtonFrontPage}}
         </div>
-</section>
+    <section class="game-list">
+        {{>gameListSection games=games}}
+    </section>
+</form>

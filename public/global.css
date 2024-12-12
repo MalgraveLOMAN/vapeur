@@ -1,4 +1,10 @@
-#title {
+body {
+    font-family: 'Press Start 2p';
+    font-size: 10px;
+    src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap') format('truetype');
+}
+
+h1 {
     font-size: 24px;
     white-space: nowrap;
     overflow: hidden;
@@ -20,7 +26,7 @@
     text-decoration: none;
     font-size: 17px;
     text-align: center;
-    flex:1;
+    flex: 1;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -33,7 +39,6 @@
     background-color: #7a7a7a;
 }
 
-
 @media (max-width: 500px) {
     .navbar {
         flex-direction: column;
@@ -42,7 +47,111 @@
     .navbar a {
         border-radius: 0;
     }
+
     #title {
         font-size: 18px;
     }
+}
+
+button {
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    text-decoration: none;
+    color: #333333;
+    font-size: 15px;
+    border-radius: 5px;
+    width: 200px;
+    height: 40px;
+    border: 1px solid #333333;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+#bad {
+    background-color: #ff0000;
+}
+
+#good {
+    background-color: #00ff00;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+}
+
+.menu-container {
+    display: grid;
+    gap: 10px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.game-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    padding: 20px;
+}
+
+.game-item a {
+    text-decoration: none;
+}
+.game-item {
+    border: 1px solid #333;
+    margin: 0;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;  
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    overflow: hidden;
+    transition: 
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-radius 0.3s ease;
+}
+
+.game-details {
+    text-align: center;
+    display: flex;
+    margin: 10px;
+    min-width: 90%;
+    min-height: 60%;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.game-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.game-item:hover .game-details {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.sub-details {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.game-item:hover .sub-details {
+    opacity: 1;
+}
+.form-popup {
+    background-color: (0, 255, 255, 1);
 }
