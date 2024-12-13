@@ -2,13 +2,17 @@
 <label for={{id}}>
   <div class="game-item">
     <div class="game-details">
-      <input type="checkbox" class="checkbox-game-form" id={{id}} name="game-id" value={{id}}>
       <span class="game-title"><a href="/games/{{id}}">{{title}}</a></span>
       <div class="sub-details">
         <p class="game-description">{{description}}</p>
-        <p class="game-release-date">{{releaseDate}}</p>
-        <p class="game-type"><a href="/games/type/{{type.id}}">{{type.type}}</a></p>
-        <p class="game-editor"><a href="/games/editor/{{editor.id}}">{{editor.name}}</a></p>
+        <h1 class="game-type"><a href="/games/type/{{type.id}}">{{type.type}}</a></h1>
+        <h1 class="game-editor"><a href="/games/editor/{{editor.id}}">{{editor.name}}</a></h1>
+        <H1 class="game-release-date">{{releaseDate}}</h1>
+
+      </div>
+      <div class="checkbox-wrapper-19">
+        <input type="checkbox" class="checkbox-game-form" id="{{id}}" name="game-id" value="{{id}}">
+        <div class="check-box"></div>
       </div>
     </div>
   </div>
