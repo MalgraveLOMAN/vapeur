@@ -132,7 +132,10 @@ button {
     padding: 10px;
     transition: background-color 0.3s ease;
 }
+.game-title {
+    margin-top: 10px;
 
+}
 .game-item:hover {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -156,7 +159,10 @@ button {
 }
 
 .form-popup {
-    background-color: (0, 255, 255, 1);
+    background-color: rgba(0, 255, 255, 1);
+    padding: 10px;
+    z-index: 10;
+    border-radius: 5px;
 }
 
 .checkbox-wrapper-19 {
@@ -168,7 +174,6 @@ button {
     0% {
         height: 0;
     }
-
     100% {
         height: calc(var(--checkbox-height) / 2);
     }
