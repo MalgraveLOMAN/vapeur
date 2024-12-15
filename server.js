@@ -19,6 +19,11 @@ hbs.registerPartials(path.join(__dirname, "views", "partials"));
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//Création d'un helper pour comparer les deux valeurs afin de savoir si oui ou non la valeure est selectionnée par défaut
+hbs.registerHelper('setValue', function (value1, value2, select) {
+    return value1 === value2 ? select : '';
+});
+
 //Gestion des menu déroulant des fomulaires, ajout global à la réponse de requête
 //Si types et editors sont vide alors, le récupérer dans la bdd, sinon, juste assigner à res.locals.type
 //https://www.geeksforgeeks.org/express-js-res-locals-property/
@@ -359,21 +364,38 @@ app.get("/games/editor/:id", async (req, res) => {
 });
 
 // Update Data Section
+app.get("/games/update/:id", async (req, res) => {
+    const { id } = req.params;
+    const games = await prisma.Game.findUnique({
+        where: { id: parseInt(id) },
+        include: {
+            type: true,
+            editor: true,
+        },
+    });
+    //Conversion en YYYY-MM-DD pour s'accorder avec input TypeDate
+    //games.releaseDate = new Date(games.releaseDate).toISOString().split('T')[0];
+
+    res.render("games/editGames", {
+        title: `Vapeur - Edit - ${games.title}`,
+        games,
+    });
+});
 
 app.post("/game/update/:id", async (req, res) => {
     const { id } = req.params;
     const { 'game-title': title, 'game-description': description, 'game-editor': editorId, 'game-type': typeId, 'game-release-date': releaseDate } = req.body;
-        await prisma.Game.update({
-            where: { id: parseInt(id) },
-            data: {
-                title,
-                description,
-                releaseDate: new Date(releaseDate),
-                typeId: parseInt(typeId),
-                editorId: parseInt(editorId),
-            },
-        });
-        res.redirect(`/games/${id}`);
+    await prisma.Game.update({
+        where: { id: parseInt(id) },
+        data: {
+            title,
+            description,
+            releaseDate: new Date(releaseDate),
+            typeId: parseInt(typeId),
+            editorId: parseInt(editorId),
+        },
+    });
+    res.redirect(`/games/${id}`);
 });
 //Enlever les jeux de la front page
 app.post("/removeFront", async (req, res) => {
