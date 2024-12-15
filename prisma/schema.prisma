@@ -38,5 +38,6 @@ model Game {
   FrontPage   Boolean  @default(false)
   type        Type     @relation(fields: [typeId], references: [id])
   editor      Editor   @relation(fields: [editorId], references: [id])
+  imagePath    String?
 }
 

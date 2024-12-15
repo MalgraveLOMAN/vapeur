@@ -32,6 +32,10 @@
                 <label for="game-release-date"><b>Date de sortie du jeu</b></label>
                 <input type="date" id="game-release-date" name="game-release-date">
             </div>
+            <div class="form-group">
+                <label for="game-image"><b>Image</b></label>
+                <input type="file" id="game-image" name="game-image" accept="image/*" required>
+            </div>
             <div class="form-actions">
                 <button type="submit" class="btn">Ajouter un jeu</button>
                 <button type="button" class="btn cancel" onclick="closeForm('game-form')">
