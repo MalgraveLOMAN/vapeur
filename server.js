@@ -473,7 +473,7 @@ app.post("/editor/delete", async (req, res) => {
             });
         }
     }
-    res.redirect(req.get("referer"));
+    res.redirect("/editors");
 })
 
 // Delete Data Section
@@ -491,7 +491,7 @@ app.post("/game/delete", async (req, res) => {
             });
         }
     }
-    res.redirect(req.get("referer"));
+    res.redirect("/games");
 })
 
 //Layout : false == Ne pas utiliser le modèle par défaut du layout
