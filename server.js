@@ -20,18 +20,20 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //Gestion des menu déroulant des fomulaires, ajout global à la réponse de requête
-//Si types et editors sont vide alors, le récupérer dans la bdd, sinon, juste assigner à res.locals.type
+//Si types et editors sont vide alors, le récupérer dans la bdd, sinon, juste assigner à res.locals.type ou alors excuter à chaque refresh
 //https://www.geeksforgeeks.org/express-js-res-locals-property/
-let TypesEditorObject = { types: null, editors: null };
+let TypesEditorObject = { types: null, editors: null, lastUpdate: 0 };
 app.use(async (req, res, next) => {
+    let now = Date.now();
     try {
-        if (!TypesEditorObject.types || !TypesEditorObject.editors) {
+        if (!TypesEditorObject.types || !TypesEditorObject.editors || now - TypesEditorObject.lastUpdate > 1) {
             TypesEditorObject.types = await prisma.Type.findMany();
             TypesEditorObject.editors = await prisma.Editor.findMany({
                 where: {
                     active: true,
-                }
+                },
             });
+            TypesEditorObject.lastUpdate = now;
         }
         res.locals.types = TypesEditorObject.types;
         res.locals.editors = TypesEditorObject.editors;
@@ -172,7 +174,7 @@ async function DataTests() {
                 },
             ],
         });
-        
+
     } catch (error) {
         console.error('Erreur lors de l\'insertion des données de test:', error);
     } finally {
@@ -184,8 +186,7 @@ async function DataTests() {
 CheckInsert();
 //Insérer un sample de données pour effectuer des tests
 DataTests();
-
-//////////////////
+//Mettre à jours les editeurs et les types//////////////////
 //              //
 //    C R U D   //
 //              //
@@ -228,7 +229,7 @@ app.post('/gameCreate', upload.single('game-image'), async function (req, res) {
         } = req.body;
 
         const imagePath = req.file ? `/img/${req.file.filename}` : null;
-        
+
         await prisma.game.create({
             data: {
                 title,
@@ -239,7 +240,6 @@ app.post('/gameCreate', upload.single('game-image'), async function (req, res) {
                 imagePath
             },
         });
-
         res.redirect(req.get('referer'));
     } catch (error) {
         console.error('An error has occured: ', error);
@@ -272,7 +272,6 @@ app.post("/editorCreate", async function (req, res) {
                 description: description,
             }
         });
-
         res.redirect(req.get("referer"));
     } catch (error) {
         console.error("An error has occurred:", error);
@@ -293,21 +292,26 @@ app.get("/", async (req, res) => {
             type: true,
             editor: true,
         },
+        orderBy: {
+            title: 'asc',
+        },
     });
     formatGameDates(games);
     res.render("games/index", {
         title: "Vapeur - Home page",
-        page: { index: "active" },
         games,
     });
 });
 
 // Afficher listType.hbs (Liste des genres de jeux)
 app.get("/types", async (req, res) => {
-    const types = await prisma.Type.findMany();
+    const types = await prisma.Type.findMany({
+        orderBy: {
+            type: 'asc',
+        },
+    });
     res.render("types/listTypes", {
         title: "Vapeur - Game Types",
-        page: { types: "active" },
         types,
     });
 });
@@ -323,13 +327,15 @@ app.get("/games/type/:id", async (req, res) => {
                 include: {
                     editor: true,
                 },
+                orderBy: {
+                    title: 'asc',
+                },
             },
         },
     });
     formatGameDates(types.games);
     res.render("types/gamesByType", {
         title: `Vapeur - ${types.type}`,
-        page: { types: "active" },
         types,
     });
 });
@@ -341,11 +347,13 @@ app.get("/games", async (req, res) => {
             type: true,
             editor: true,
         },
+        orderBy: {
+            title: 'asc',
+        },
     });
     formatGameDates(games);
     res.render("games/listGames", {
         title: "Vapeur - All Games",
-        page: { games: "active" },
         games,
     });
 });
@@ -364,17 +372,19 @@ app.get("/games/:id", async (req, res) => {
 
     res.render("games/gameDetails", {
         title: `Vapeur - ${games.title}`,
-        page: { games: "active" },
         games,
     });
 });
 
 // Afficher les listEditors.hbs (Liste de tous les éditeurs de jeux)
 app.get("/editors", async (req, res) => {
-    const a_editors = await prisma.Editor.findMany();
+    const a_editors = await prisma.Editor.findMany({
+        orderBy: {
+            name: 'asc',
+        },
+    });
     res.render("editors/listEditors", {
         title: "Vapeur - Editors",
-        page: { editors: "active" },
         a_editors,
     });
 });
@@ -396,7 +406,6 @@ app.get("/games/editor/:id", async (req, res) => {
         formatGameDates(editor.games);
         res.render("editors/gamesByEditor", {
             title: `Vapeur - ${editor.name}`,
-            page: { editors: "active" },
             editor,
         });
     }
@@ -411,18 +420,19 @@ app.get("/games/editor/:id", async (req, res) => {
 app.post("/removeFront", async (req, res) => {
     let games = req.body['game-id'];
     games: [games];
-    if(games){
+    if (games) {
 
-    for (const game of games) {
-        await prisma.Game.update({
-            where: {
-                id: parseInt(game),
-            },
-            data: {
-                FrontPage: false,
-            },
-        });
-    }}
+        for (const game of games) {
+            await prisma.Game.update({
+                where: {
+                    id: parseInt(game),
+                },
+                data: {
+                    FrontPage: false,
+                },
+            });
+        }
+    }
     res.redirect(req.get("referer"));
 });
 
@@ -430,18 +440,18 @@ app.post("/removeFront", async (req, res) => {
 app.post("/addFront", async (req, res) => {
     let games = req.body['game-id'];
     games: [games];
-    if(games){
-    for (const game of games) {
-        await prisma.Game.update({
-            where: {
-                id: parseInt(game),
-            },
-            data: {
-                FrontPage: true,
-            },
-        });
+    if (games) {
+        for (const game of games) {
+            await prisma.Game.update({
+                where: {
+                    id: parseInt(game),
+                },
+                data: {
+                    FrontPage: true,
+                },
+            });
+        }
     }
-}
     res.redirect(req.get("referer"));
 })
 
@@ -450,18 +460,19 @@ app.post("/addFront", async (req, res) => {
 app.post("/editor/delete", async (req, res) => {
     let editors = req.body['editor-id'];
     editors: [editors];
-    if(editors){
+    if (editors) {
 
-    for (const editor of editors) {
-        await prisma.Editor.update({
-            where: {
-                id: parseInt(editor),
-            },
-            data: {
-                active: false,
-            },
-        });
-    }}
+        for (const editor of editors) {
+            await prisma.Editor.update({
+                where: {
+                    id: parseInt(editor),
+                },
+                data: {
+                    active: false,
+                },
+            });
+        }
+    }
     res.redirect(req.get("referer"));
 })
 
@@ -471,14 +482,15 @@ app.post("/editor/delete", async (req, res) => {
 app.post("/game/delete", async (req, res) => {
     let games = req.body['game-id'];
     games: [games];
-    if(games){
-    for (const game of games) {
-        await prisma.Game.delete({
-            where: {
-                id: parseInt(game),
-            },
-        });
-    }}
+    if (games) {
+        for (const game of games) {
+            await prisma.Game.delete({
+                where: {
+                    id: parseInt(game),
+                },
+            });
+        }
+    }
     res.redirect(req.get("referer"));
 })
 
