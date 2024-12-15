@@ -1,17 +1,16 @@
-<section class="game-list">
-    <div class="game-item">
-        <span class="game-title"><a href="/games/{{games.id}}">{{games.title}}</a></span>
-        <span class="game-description">{{games.description}}</span>
-        <span class="game-release-date">{{games.releaseDate}}</span>
-        <span class="game-type"><a href="/games/type/{{games.type.id}}">{{games.type.type}}</a></span>
-        <span class="game-editor"><a href="/games/editor/{{games.editor.id}}">{{games.editor.name}}</a></span>
-    </div>
-    <div class="buttons">
-        {{>ButtonDelete}}
-        {{#if games.FrontPage}}
-            {{>ButtonRemoveFrontPage}}
-        {{else}}
-            {{>ButtonFrontPage}}
-        {{/if}}
-    </div>
-</section>
+<div class="buttons">
+    {{>ButtonDelete}}
+    {{#if games.FrontPage}}
+    {{>ButtonRemoveFrontPage}}
+    {{else}}
+    {{>ButtonFrontPage}}
+    {{/if}}
+</div>
+<div class="game-details">
+    <h1><a href="/games/{{games.id}}">{{games.title}}</a></h1>
+    <p class="game-description">{{games.description}}</p>
+    <h1 class="game-type"><a href="/games/type/{{games.type.id}}">{{games.type.type}}</a></h1>
+    <h1 class="game-editor"><a href="/games/editor/{{games.editor.id}}">{{games.editor.name}}</a></h1>
+    <H1 class="game-release-date">{{games.releaseDate}}</h1>
+    <img src="{{games.imagePath}}">
+</div>

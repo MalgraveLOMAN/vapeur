@@ -1,7 +1,7 @@
 <section class="menu">
     <button class="open-button" onclick="openForm('game-form')">Ajouter un jeu</button>
     <div class="form-popup" id="game-form">
-        <form action="/gameCreate" class="form-container" method="POST">
+        <form action="/gameCreate" class="form-container" method="POST" enctype="multipart/form-data">
             <h1>Ajouter un Jeu</h1>
             <div class="form-group">
                 <label for="game-title"><b>Titre du jeu</b></label>
@@ -30,15 +30,18 @@
             </div>
             <div class="form-group">
                 <label for="game-release-date"><b>Date de sortie du jeu</b></label>
-                <input type="date" id="game-release-date" name="game-release-date">
+                <input type="date" id="game-release-date" name="game-release-date" required>
+            </div>
+            <div class="form-group">
+                <label for="game-image"><b>Image</b></label>
+                <input type="file" id="game-image" name="game-image" accept="image/png, image/jpeg">
             </div>
             <div class="form-actions">
-                <button type="submit" class="btn">Ajouter un jeu</button>
-                <button type="button" class="btn cancel" onclick="closeForm('game-form')">
+                <button type="submit" id="good">Ajouter un jeu</button>
+                <button type="button" id="bad" onclick="closeForm('game-form')">
                     Fermer
                 </button>
             </div>
         </form>
-
     </div>
 </section>
