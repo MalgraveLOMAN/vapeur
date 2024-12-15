@@ -211,7 +211,6 @@ const upload = multer({
 
 
 app.post('/gameCreate', upload.single('game-image'), async function (req, res) {
-    console.log(req);
     try {
         const {
             'game-title': title,
