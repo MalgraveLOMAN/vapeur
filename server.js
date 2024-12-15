@@ -431,6 +431,30 @@ app.post("/game/delete", async (req, res) => {
     res.redirect(req.get("referer"));
 })
 
+app.get("/edit/:id", async (req, res) => {
+    const { id } = req.params;  
+    const game = await prisma.Game.findUnique({
+        where: { id: parseInt(id) },  
+        include: {
+            type: true,   
+            editor: true  
+        }
+    });
+
+    // Si le jeu existe, le passer à la vue d'édition
+    if (game) {
+        res.render("games/editGames", {
+            title: `Vapeur - Modifier ${game.title}`,
+            game,         
+            types: res.locals.types,  
+            editors: res.locals.editors 
+        });
+    } else {
+        res.status(404).send("Jeu non trouvé");
+    }
+});
+
+
 //////////////////////
 //                  //
 //   A faire : 404  //
