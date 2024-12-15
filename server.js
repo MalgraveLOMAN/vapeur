@@ -356,37 +356,23 @@ app.get("/games/editor/:id", async (req, res) => {
             editor,
         });
     }
-    else {
-        res.redirect("/404");
-    }
 });
-
-// Update Data Section
-
-app.get("/edit/:id", async (req, res) => {
-    const { id } = req.params;  
-    const game = await prisma.Game.findUnique({
-        where: { id: parseInt(id) },  
-        include: {
-            type: true,   
-            editor: true  
-        }
+app.post("/game/update/:id", async (req, res) => {
+    const { id } = req.params;
+    const { 'game-title': title, 'game-description': description, 'game-editor': editorId, 'game-type': typeId, 'game-release-date': releaseDate } = req.body;
+    await prisma.Game.update({
+        where: { id: parseInt(id) },
+        data: {
+            title,
+            description,
+            releaseDate: new Date(releaseDate),
+            typeId: parseInt(typeId),
+            editorId: parseInt(editorId),
+        },
     });
+    res.redirect(`/games/${id}`);
 
-    // Si le jeu existe, le passer à la vue d'édition
-    if (game) {
-        res.render("games/editGames", {
-            title: `Vapeur - Modifier ${game.title}`,
-            game,         
-            types: res.locals.types,  
-            editors: res.locals.editors 
-        });
-    } else {
-        res.status(404).send("Jeu non trouvé");
-    }
 });
-
-
 //Enlever les jeux de la front page
 app.post("/removeFront", async (req, res) => {
     let games = req.body['game-id'];

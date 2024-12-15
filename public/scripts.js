@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-
+    document.querySelectorAll(".form-popup").forEach(f => {
+        f.style.display = "none";
+    });
     const formActions = {
         "game-form": {
             "remove-front": "/removeFront",
@@ -95,7 +97,3 @@ function Click(event) {
         openFormId = null;
     }
 }
-
-
-
-
