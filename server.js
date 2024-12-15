@@ -212,6 +212,7 @@ const upload = multer({
 // Create Data Section
 
 app.post('/gameCreate', upload.single('game-image'), async function (req, res) {
+    console.log(req);
     try {
         const {
             'game-title': title,
@@ -221,10 +222,8 @@ app.post('/gameCreate', upload.single('game-image'), async function (req, res) {
             'game-release-date': releaseDate
         } = req.body;
 
-        // Vérifiez si un fichier a été uploadé
-        const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
-
-        // Création du jeu dans la base de données
+        const imagePath = req.file ? `/img/${req.file.filename}` : null;
+        
         await prisma.game.create({
             data: {
                 title,
