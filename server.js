@@ -357,21 +357,23 @@ app.get("/games/editor/:id", async (req, res) => {
         });
     }
 });
+
+// Update Data Section
+
 app.post("/game/update/:id", async (req, res) => {
     const { id } = req.params;
     const { 'game-title': title, 'game-description': description, 'game-editor': editorId, 'game-type': typeId, 'game-release-date': releaseDate } = req.body;
-    await prisma.Game.update({
-        where: { id: parseInt(id) },
-        data: {
-            title,
-            description,
-            releaseDate: new Date(releaseDate),
-            typeId: parseInt(typeId),
-            editorId: parseInt(editorId),
-        },
-    });
-    res.redirect(`/games/${id}`);
-
+        await prisma.Game.update({
+            where: { id: parseInt(id) },
+            data: {
+                title,
+                description,
+                releaseDate: new Date(releaseDate),
+                typeId: parseInt(typeId),
+                editorId: parseInt(editorId),
+            },
+        });
+        res.redirect(`/games/${id}`);
 });
 //Enlever les jeux de la front page
 app.post("/removeFront", async (req, res) => {
