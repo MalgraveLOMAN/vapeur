@@ -98,6 +98,9 @@ button {
 
 .game-item a {
     text-decoration: none;
+    text-shadow:
+    1px 1px 2px rgba(255, 255, 255, 1),
+    -1px -1px 2px rgba(255, 255, 255,1);
 }
 
 .game-item {
@@ -112,6 +115,9 @@ button {
     color: white;
     cursor: pointer;
     overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     transition:
         transform 0.3s ease,
         box-shadow 0.3s ease,
@@ -132,10 +138,12 @@ button {
     padding: 10px;
     transition: background-color 0.3s ease;
 }
+
 .game-title {
     margin-top: 10px;
-
+    font-size: 150%;
 }
+
 .game-item:hover {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -174,6 +182,7 @@ button {
     0% {
         height: 0;
     }
+
     100% {
         height: calc(var(--checkbox-height) / 2);
     }

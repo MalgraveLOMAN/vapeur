@@ -127,45 +127,52 @@ async function DataTests() {
                     description: 'Un jeu d\'aventure où le joueur explore un monde ouvert.',
                     releaseDate: new Date('2017-03-03'),
                     typeId: 2,
-                    editorId: 1
+                    editorId: 1,
+                    imagePath: '/img/1734271000001.png'
                 },
                 {
                     title: 'Super Mario Odyssey',
                     description: 'Un jeu de plateforme en 3D où Mario doit sauver Princess Peach.',
                     releaseDate: new Date('2017-10-27'),
                     typeId: 1,
-                    editorId: 1
+                    editorId: 1,
+                    imagePath: '/img/1734271000002.png'
                 },
                 {
                     title: 'League of Legends',
                     description: 'Un jeu de type MOBA où deux équipes s’affrontent pour détruire la base ennemie.',
                     releaseDate: new Date('2009-10-27'),
                     typeId: 7,
-                    editorId: 2
+                    editorId: 2,
+                    imagePath: '/img/1734271000003.png'
                 },
                 {
                     title: 'Valorant',
                     description: 'Un jeu de tir tactique où chaque personnage possède des capacités uniques.',
                     releaseDate: new Date('2020-06-02'),
                     typeId: 1,
-                    editorId: 2
+                    editorId: 2,
+                    imagePath: '/img/1734271000004.png'
                 },
                 {
                     title: 'The Last of Us Part II',
                     description: 'Un jeu d\'action-aventure dans un monde post-apocalyptique.',
                     releaseDate: new Date('2020-06-19'),
                     typeId: 3,
-                    editorId: 3
+                    editorId: 3,
+                    imagePath: '/img/1734271000005.png'
                 },
                 {
                     title: 'Uncharted 4: A Thief\'s End',
                     description: 'Un jeu d\'aventure avec des énigmes et des combats intenses.',
                     releaseDate: new Date('2016-05-10'),
                     typeId: 1,
-                    editorId: 3
+                    editorId: 3,
+                    imagePath: '/img/1734271000006.png'
                 },
             ],
         });
+        
     } catch (error) {
         console.error('Erreur lors de l\'insertion des données de test:', error);
     } finally {
@@ -301,7 +308,6 @@ app.get("/types", async (req, res) => {
     res.render("types/listTypes", {
         title: "Vapeur - Game Types",
         page: { types: "active" },
-
         types,
     });
 });
