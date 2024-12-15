@@ -363,6 +363,30 @@ app.get("/games/editor/:id", async (req, res) => {
 
 // Update Data Section
 
+app.get("/edit/:id", async (req, res) => {
+    const { id } = req.params;  
+    const game = await prisma.Game.findUnique({
+        where: { id: parseInt(id) },  
+        include: {
+            type: true,   
+            editor: true  
+        }
+    });
+
+    // Si le jeu existe, le passer à la vue d'édition
+    if (game) {
+        res.render("games/editGames", {
+            title: `Vapeur - Modifier ${game.title}`,
+            game,         
+            types: res.locals.types,  
+            editors: res.locals.editors 
+        });
+    } else {
+        res.status(404).send("Jeu non trouvé");
+    }
+});
+
+
 //Enlever les jeux de la front page
 app.post("/removeFront", async (req, res) => {
     let games = req.body['game-id'];
@@ -431,28 +455,7 @@ app.post("/game/delete", async (req, res) => {
     res.redirect(req.get("referer"));
 })
 
-app.get("/edit/:id", async (req, res) => {
-    const { id } = req.params;  
-    const game = await prisma.Game.findUnique({
-        where: { id: parseInt(id) },  
-        include: {
-            type: true,   
-            editor: true  
-        }
-    });
 
-    // Si le jeu existe, le passer à la vue d'édition
-    if (game) {
-        res.render("games/editGames", {
-            title: `Vapeur - Modifier ${game.title}`,
-            game,         
-            types: res.locals.types,  
-            editors: res.locals.editors 
-        });
-    } else {
-        res.status(404).send("Jeu non trouvé");
-    }
-});
 
 
 //////////////////////

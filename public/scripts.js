@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "remove-front": "/removeFront",
             "delete": "/game/delete",
             "front-page": "/addFront",
+            "edit-game" : "/edit/1"
         },
         "editor-form": {
             "delete": "/editor/delete",
