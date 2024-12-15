@@ -4,7 +4,7 @@ const { PrismaClient } = require("@prisma/client");
 const bodyParser = require("body-parser");
 const hbs = require("hbs");
 const path = require("path");
-const { deserialize } = require("v8");
+const multer = require('multer');
 
 // App creation
 const prisma = new PrismaClient();
@@ -186,7 +186,32 @@ DataTests();
 
 // Create Data Section
 
-app.post("/gameCreate", async function (req, res) {
+const ImageFile = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/img/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    const Types = ['image/jpeg', 'image/png',];
+    if (Types.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Unsuported image type'), false);
+    }
+};
+
+const upload = multer({
+    storage: ImageFile,
+    fileFilter
+});
+
+
+app.post('/gameCreate', upload.single('game-image'), async function (req, res) {
+    console.log(req);
     try {
         const {
             'game-title': title,
@@ -195,6 +220,9 @@ app.post("/gameCreate", async function (req, res) {
             'game-type': typeId,
             'game-release-date': releaseDate
         } = req.body;
+
+        const imagePath = req.file ? `/img/${req.file.filename}` : null;
+        
         await prisma.game.create({
             data: {
                 title,
@@ -202,14 +230,17 @@ app.post("/gameCreate", async function (req, res) {
                 releaseDate: new Date(releaseDate),
                 typeId: parseInt(typeId),
                 editorId: parseInt(editorId),
+                imagePath
             },
         });
-        res.redirect(req.get("referer"));
+
+        res.redirect(req.get('referer'));
     } catch (error) {
-        console.error("An error has occured : ", error);
-        res.status(500).send("An error has occured.");
+        console.error('An error has occured: ', error);
+        res.status(500).send('An error has occured.');
     }
 });
+
 
 app.post("/editorCreate", async function (req, res) {
     try {

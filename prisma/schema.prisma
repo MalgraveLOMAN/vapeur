@@ -35,6 +35,7 @@ model Game {
   releaseDate DateTime
   typeId      Int
   editorId    Int
+  imagePath    String?
   FrontPage   Boolean  @default(false)
   type        Type     @relation(fields: [typeId], references: [id])
   editor      Editor   @relation(fields: [editorId], references: [id])
