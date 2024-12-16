@@ -1,88 +1,339 @@
-/*
-RENDRE LE TOUT RESPONSIVE
-*/
-
-* {
-    box-sizing: border-box;
+body {
+    font-family: 'Press Start 2p';
+    font-size: 10px;
+    src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap') format('truetype');
 }
 
-.game-slide {
-    max-width: 1000px;
-    position: relative;
-    margin: auto;
+h1 {
+    font-size: 24px;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.navbar {
+    display: flex;
+    width: 100%;
+    background-color: #555;
+    overflow: hidden;
+    border-radius: 50px;
+}
+
+.navbar a {
+    padding: 12px;
+    color: white;
+    text-decoration: none;
+    font-size: 17px;
+    text-align: center;
+    flex: 1;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar a:hover {
+    background-color: #000;
+    transform: scale(1.05);
+}
+
+.navbar a.active {
+    background-color: #7a7a7a;
+}
+
+@media (max-width: 500px) {
+    .navbar {
+        flex-direction: column;
+    }
+
+    .navbar a {
+        border-radius: 0;
+    }
+
+    #title {
+        font-size: 18px;
+    }
+}
+
+button {
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    text-decoration: none;
+    color: #333333;
+    font-size: 15px;
+    border-radius: 5px;
+    width: 200px;
+    height: 40px;
+    border: 1px solid #333333;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+#bad {
+    background-color: #ff0000;
+}
+
+#good {
+    background-color: #00ff00;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+}
+
+.menu-container {
+    display: grid;
+    gap: 10px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
 }
 
 .game-list {
-    max-width: 1000px;
-    position: relative;
-    margin: auto;
-    overflow: hidden;
-}
-
-.game-item-slide {
-    display: none;
-    text-align: center;
-    padding: 20px;
-    background: #f4f4f4;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.game-form {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0;
     padding: 20px;
 }
 
+.game-item a {
+    text-decoration: none;
+    text-shadow:
+    1px 1px 2px rgba(255, 255, 255, 1),
+    -1px -1px 2px rgba(255, 255, 255,1);
+}
+
 .game-item {
+    border: 1px solid #333;
+    margin: 0;
     aspect-ratio: 1;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-radius 0.3s ease,
+        background-color 0.3s ease;
+}
+
+.game-details {
     text-align: center;
-    padding: 20px;
-    background: #f4f4f4;
-    border: 1px solid #ddd;
+    display: flex;
+    margin: 10px;
+    min-width: 90%;
+    min-height: 60%;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
 }
 
 .game-title {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: 150%;
 }
 
-.game-description,
-.game-release-date,
-.game-type,
-.game-editor {
-    display: block;
-    margin: 5px 0;
+.game-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
 }
 
-.prev,
-.next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    margin-top: -22px;
-    padding: 16px;
-    color: black;
-
-    user-select: none;
+.game-item:hover .game-details {
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-.next {
-    right: 0;
-    border-radius: 3px 0 0 3px;
+.sub-details {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.game-item:hover .sub-details {
+    opacity: 1;
 }
 
 .form-popup {
+    background-color: rgba(0, 255, 255, 1);
+    padding: 10px;
+    z-index: 10;
+    border-radius: 5px;
+}
+
+.checkbox-wrapper-19 {
+    box-sizing: border-box;
+    --checkbox-height: 25px;
+}
+
+@-moz-keyframes dothabottomcheck-19 {
+    0% {
+        height: 0;
+    }
+
+    100% {
+        height: calc(var(--checkbox-height) / 2);
+    }
+}
+
+@-webkit-keyframes dothabottomcheck-19 {
+    0% {
+        height: 0;
+    }
+
+    100% {
+        height: calc(var(--checkbox-height) / 2);
+    }
+}
+
+@keyframes dothabottomcheck-19 {
+    0% {
+        height: 0;
+    }
+
+    100% {
+        height: calc(var(--checkbox-height) / 2);
+    }
+}
+
+@keyframes dothatopcheck-19 {
+    0% {
+        height: 0;
+    }
+
+    50% {
+        height: 0;
+    }
+
+    100% {
+        height: calc(var(--checkbox-height) * 1.2);
+    }
+}
+
+@-webkit-keyframes dothatopcheck-19 {
+    0% {
+        height: 0;
+    }
+
+    50% {
+        height: 0;
+    }
+
+    100% {
+        height: calc(var(--checkbox-height) * 1.2);
+    }
+}
+
+@-moz-keyframes dothatopcheck-19 {
+    0% {
+        height: 0;
+    }
+
+    50% {
+        height: 0;
+    }
+
+    100% {
+        height: calc(var(--checkbox-height) * 1.2);
+    }
+}
+
+.checkbox-wrapper-19 input[type=checkbox] {
     display: none;
 }
 
-.menu-container {
-    display: flex;
+.checkbox-wrapper-19 .check-box {
+    height: var(--checkbox-height);
+    width: var(--checkbox-height);
+    background-color: transparent;
+    border: calc(var(--checkbox-height) * .1) solid #000;
+    border-radius: 5px;
+    position: relative;
+    display: inline-block;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-transition: border-color ease 0.2s;
+    -o-transition: border-color ease 0.2s;
+    -webkit-transition: border-color ease 0.2s;
+    transition: border-color ease 0.2s;
+    cursor: pointer;
+}
 
+.checkbox-wrapper-19 .check-box::before,
+.checkbox-wrapper-19 .check-box::after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: absolute;
+    height: 0;
+    width: calc(var(--checkbox-height) * .2);
+    background-color: #34b93d;
+    display: inline-block;
+    -moz-transform-origin: left top;
+    -ms-transform-origin: left top;
+    -o-transform-origin: left top;
+    -webkit-transform-origin: left top;
+    transform-origin: left top;
+    border-radius: 5px;
+    content: " ";
+    -webkit-transition: opacity ease 0.5;
+    -moz-transition: opacity ease 0.5;
+    transition: opacity ease 0.5;
+}
+
+.checkbox-wrapper-19 .check-box::before {
+    top: calc(var(--checkbox-height) * .72);
+    left: calc(var(--checkbox-height) * .41);
+    box-shadow: 0 0 0 calc(var(--checkbox-height) * .05) var(--background-color);
+    -moz-transform: rotate(-135deg);
+    -ms-transform: rotate(-135deg);
+    -o-transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+}
+
+.checkbox-wrapper-19 .check-box::after {
+    top: calc(var(--checkbox-height) * .37);
+    left: calc(var(--checkbox-height) * .05);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.checkbox-wrapper-19 input[type=checkbox]:checked+.check-box,
+.checkbox-wrapper-19 .check-box.checked {
+    border-color: #34b93d;
+}
+
+.checkbox-wrapper-19 input[type=checkbox]:checked+.check-box::after,
+.checkbox-wrapper-19 .check-box.checked::after {
+    height: calc(var(--checkbox-height) / 2);
+    -moz-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+    -o-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+    -webkit-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+    animation: dothabottomcheck-19 0.2s ease 0s forwards;
+}
+
+.checkbox-wrapper-19 input[type=checkbox]:checked+.check-box::before,
+.checkbox-wrapper-19 .check-box.checked::before {
+    height: calc(var(--checkbox-height) * 1.2);
+    -moz-animation: dothatopcheck-19 0.4s ease 0s forwards;
+    -o-animation: dothatopcheck-19 0.4s ease 0s forwards;
+    -webkit-animation: dothatopcheck-19 0.4s ease 0s forwards;
+    animation: dothatopcheck-19 0.4s ease 0s forwards;
 }

@@ -1,13 +1,22 @@
-<form class="game-form" method="post">
-  {{#each games}}
-  <label for={{id}}>
-    <div class="game-item">
-      <input type="checkbox" class="checkbox-game-form" id={{id}} name="game-id" value={{id}}>
+{{#each games}}
+<label for={{id}}>
+  <div class="game-item" style="background-image: url({{imagePath}});">
+
+    <div class="game-details">
+      <div class="checkbox-wrapper-19">
+        <input type="checkbox" class="checkbox-game-form" id="{{id}}" name="game-id" value="{{id}}">
+        <div class="check-box"></div>
+      </div>
       <span class="game-title"><a href="/games/{{id}}">{{title}}</a></span>
-      <span class="game-description">{{description}}</span>
-      <span class="game-release-date">{{releaseDate}}</span>
-      <span class="game-type"><a href="/games/type/{{type.id}}">{{type.type}}</a></span>
-      <span class="game-editor"><a href="/games/editor/{{editor.id}}">{{editor.name}}</a></span>
+
+      <div class="sub-details">
+        <p class="game-description">{{description}}</p>
+        <h1 class="game-type"><a href="/games/type/{{type.id}}">{{type.type}}</a></h1>
+        <h1 class="game-editor"><a href="/games/editor/{{editor.id}}">{{editor.name}}</a></h1>
+        <h1 class="game-release-date">{{releaseDate}}</h1>
+      </div>
+
     </div>
-  </label>
-  {{/each}}
+  </div>
+</label>
+{{/each}}

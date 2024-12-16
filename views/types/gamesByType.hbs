@@ -1,15 +1,14 @@
 <h1>{{types.type}} Games</h1>
-
 <p>Description : {{types.description}}</p>
 {{> gameCarousel games=types.games}}
-
 <h2>Liste des Jeux :</h2>
-<section class="game-list">
-    {{>gameListSection games=types.games}}
-     <div class="buttons">
+<form class="game-form" method="post">
+  <div class="buttons">
     {{>ButtonDelete}}
     {{>ButtonFrontPage}}
     {{>ButtonRemoveFrontPage}}
   </div>
+  <section class="game-list">
+    {{>gameListSection games=types.games}}
+  </section>
 </form>
-</section>

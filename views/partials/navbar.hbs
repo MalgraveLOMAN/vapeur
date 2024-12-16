@@ -1,6 +1,6 @@
-<nav>
-    <a href="/">Index</a>
-    <a href="/types">Game Types</a>
-    <a href="/editors">Game Studios</a>
-    <a href="/games">Games</a>
+<nav class="navbar">
+    <a {{#if page.index}}class="{{page.index}}"{{/if}} href="/">Home</a>
+    <a {{#if page.types}}class="{{page.types}}"{{/if}} href="/types">Game Types</a>
+    <a {{#if page.editors}}class="{{page.editors}}"{{/if}} href="/editors">Game Studios</a>
+    <a {{#if page.games}}class="{{page.games}}"{{/if}} href="/games">Games</a>
 </nav>
