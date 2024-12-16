@@ -8,11 +8,14 @@
 {{editor.description}}
 <form class="game-form" method="post">
   <div class="buttons">
+    <p>
+    {{>ButtonEditEditors}}
+    </p>
+  
     {{>ButtonDelete}}
     {{>ButtonFrontPage}}
     {{>ButtonRemoveFrontPage}}
-    {{>ButtonEditEditors}}
-  </div>
+    </div>
   <section class="game-list">
     {{>gameListSection games=editor.games}}
   </section>

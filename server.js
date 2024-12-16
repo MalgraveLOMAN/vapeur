@@ -53,7 +53,9 @@ function formatGameDates(games) {
     });
     return games;
 }
-
+hbs.registerHelper('setValue', function (value1, value2, attribute) {
+    return value1 === value2 ? attribute : '';
+});
 //Data Creation & Data Check
 
 async function CheckInsert() {
@@ -508,21 +510,22 @@ app.post("/game/delete", async (req, res) => {
     res.redirect("/games");
 })
 
-app.get("/edit/:id", async (req, res) => {
+app.get("/games/update/:id", async (req, res) => {
     const { id } = req.params;  
-    const game = await prisma.Game.findUnique({
+    const games = await prisma.Game.findUnique({
         where: { id: parseInt(id) },  
         include: {
             type: true,   
             editor: true  
         }
     });
+    games.releaseDate = new Date(games.releaseDate).toISOString().split('T')[0];
 
     // Si le jeu existe, le passer à la vue d'édition
-    if (game) {
+    if (games) {
         res.render("games/editGames", {
-            title: `Vapeur - Modifier ${game.title}`,
-            game,         
+            title: `Vapeur - Modifier ${games.title}`,
+            games,         
             types: res.locals.types,  
             editors: res.locals.editors 
         });
@@ -564,11 +567,13 @@ app.post("/editors/update/:id", async (req, res) => {
 });
 
 //Layout : false == Ne pas utiliser le modèle par défaut du layout
+/*
 app.use((req, res, next) => {
     res.status(404).render('404', {
         layout: false
     });
 });
+*/
 
 //////////////////////
 //                  //
