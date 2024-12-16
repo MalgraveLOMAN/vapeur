@@ -104,108 +104,7 @@ async function CheckInsert() {
         await prisma.$disconnect();
     }
 }
-async function DataTests() {
-    const games = await prisma.Game.findMany();
-    const editors = await prisma.Editor.findMany();
 
-    if (editors.length > 0) {
-        return;
-    }
-
-    try {
-        await prisma.Editor.createMany({
-            data: [
-                {
-                    name: 'Nintendo',
-                    description: "Nintendo est une entreprise multinationale japonaise par Yamauchi Fusajirō8 à Kyoto. Elle est spécialisée dans la fabrication de consoles de jeu vidéo depuis 1977 avec la sortie de la Color TV-Game, ainsi que dans la conception de jeux vidéo, dont les séries Mario et The Legend of Zelda."
-                },
-                {
-                    name: 'RiotGames',
-                    description: "Riot Games est une entreprise américaine d'édition et de développement de jeux vidéo fondée en 2006 et située à Los Angeles, en Californie. Elle organise aussi plusieurs tournois de sport électronique."
-                },
-                {
-                    name: 'NaughtyDog',
-                    description: "Naughty Dog est une société américaine de développement de jeu vidéo domiciliée à Santa Monica, fondée en 1984 par Andy Gavin et Jason Rubin sous le nom de JAM Software, avant d'être rebaptisé Naughty Dog en 1989."
-                },
-                {
-                    name: 'FromSoftware',
-                    description: "FromSoftware, Inc. (株式会社フロム・ソフトウェア, Kabushikigaisha Furomu Sofutowea?) est une entreprise japonaise de développement de jeux vidéo, fondée en 1986 et située à Tokyo. Elle est notamment connue pour avoir créé les séries Dark Souls et Armored Core, ainsi que les jeux Bloodborne (2015), Sekiro: Shadows Die Twice (2019) et Elden Ring (2022).",
-                }
-            ],
-        });
-
-        const types = await prisma.Type.findMany();
-
-        const typeAction = await types.find(type => type.type === 'Action');
-        const typeAventure = await types.find(type => type.type === 'Aventure');
-        const typeRPG = await types.find(type => type.type === 'RPG');
-        const typeSimulation = await types.find(type => type.type === 'Simulation');
-        const typeSport = await types.find(type => type.type === 'Sport');
-        const typeMMORPG = await types.find(type => type.type === 'MMORPG');
-        const typeMOBA = await types.find(type => type.type === 'MOBA');
-
-        if (games.length > 0) {
-            return;
-        }
-        await prisma.Game.createMany({
-            data: [
-                {
-                    title: 'The Legend of Zelda: Breath of the Wild',
-                    description: 'Un jeu d\'aventure où le joueur explore un monde ouvert.',
-                    releaseDate: new Date('2017-03-03'),
-                    typeId: 2,
-                    editorId: 1,
-                    imagePath: '/img/1734271000001.png'
-                },
-                {
-                    title: 'Super Mario Odyssey',
-                    description: 'Un jeu de plateforme en 3D où Mario doit sauver Princess Peach.',
-                    releaseDate: new Date('2017-10-27'),
-                    typeId: 1,
-                    editorId: 1,
-                    imagePath: '/img/1734271000002.png'
-                },
-                {
-                    title: 'League of Legends',
-                    description: 'Un jeu de type MOBA où deux équipes s’affrontent pour détruire la base ennemie.',
-                    releaseDate: new Date('2009-10-27'),
-                    typeId: 7,
-                    editorId: 2,
-                    imagePath: '/img/1734271000003.png'
-                },
-                {
-                    title: 'Valorant',
-                    description: 'Un jeu de tir tactique où chaque personnage possède des capacités uniques.',
-                    releaseDate: new Date('2020-06-02'),
-                    typeId: 1,
-                    editorId: 2,
-                    imagePath: '/img/1734271000004.png'
-                },
-                {
-                    title: 'The Last of Us Part II',
-                    description: 'Un jeu d\'action-aventure dans un monde post-apocalyptique.',
-                    releaseDate: new Date('2020-06-19'),
-                    typeId: 3,
-                    editorId: 3,
-                    imagePath: '/img/1734271000005.png'
-                },
-                {
-                    title: 'Uncharted 4: A Thief\'s End',
-                    description: 'Un jeu d\'aventure avec des énigmes et des combats intenses.',
-                    releaseDate: new Date('2016-05-10'),
-                    typeId: 1,
-                    editorId: 3,
-                    imagePath: '/img/1734271000006.png'
-                },
-            ],
-        });
-
-    } catch (error) {
-        console.error('Erreur lors de l\'insertion des données de test:', error);
-    } finally {
-        console.log('Insertion des données de test terminée');
-    }
-}
 
 //
 //  CREATE
@@ -580,10 +479,8 @@ app.use((req, res) => {
 
 //Check if Datas are set in db, if not create them.
 CheckInsert();
-//Create Data
-DataTests();
-//Start Server on port = PORT
 
+//Start Server on port = PORT
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
