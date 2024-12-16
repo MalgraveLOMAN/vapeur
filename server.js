@@ -415,7 +415,21 @@ app.get("/games/editor/:id", async (req, res) => {
 });
 
 // Update Data Section
-
+app.post("/game/update/:id", async (req, res) => {
+    const { id } = req.params;
+    const { 'game-title': title, 'game-description': description, 'game-editor': editorId, 'game-type': typeId, 'game-release-date': releaseDate } = req.body;
+        await prisma.Game.update({
+            where: { id: parseInt(id) },
+            data: {
+                title,
+                description,
+                releaseDate: new Date(releaseDate),
+                typeId: parseInt(typeId),
+                editorId: parseInt(editorId),
+            },
+        });
+        res.redirect(`/games/${id}`);
+});
 //Enlever les jeux de la front page
 app.post("/removeFront", async (req, res) => {
     let games = req.body['game-id'];
@@ -493,6 +507,61 @@ app.post("/game/delete", async (req, res) => {
     }
     res.redirect("/games");
 })
+
+app.get("/edit/:id", async (req, res) => {
+    const { id } = req.params;  
+    const game = await prisma.Game.findUnique({
+        where: { id: parseInt(id) },  
+        include: {
+            type: true,   
+            editor: true  
+        }
+    });
+
+    // Si le jeu existe, le passer à la vue d'édition
+    if (game) {
+        res.render("games/editGames", {
+            title: `Vapeur - Modifier ${game.title}`,
+            game,         
+            types: res.locals.types,  
+            editors: res.locals.editors 
+        });
+    } else {
+        res.status(404).send("Jeu non trouvé");
+    }
+});
+// Route pour afficher le formulaire d'édition d'un éditeur
+app.get("/editors/update/:id", async (req, res) => {
+    const { id } = req.params;
+    const editor = await prisma.Editor.findUnique({
+        where: { id: parseInt(id) },
+    });
+
+    if (editor) {
+        res.render("editors/editEditors", {
+            title: `Modifier l'Éditeur : ${editor.name}`,
+            editor,
+        });
+    } else {
+        res.status(404).send("Éditeur non trouvé");
+    }
+});
+
+// Route pour mettre à jour un éditeur
+app.post("/editors/update/:id", async (req, res) => {
+    const { id } = req.params;
+    const { 'editor-name': name, 'editor-description': description } = req.body;
+
+    await prisma.Editor.update({
+        where: { id: parseInt(id) },
+        data: {
+            name,
+            description,
+        },
+    });
+
+    res.redirect(`/editors`);
+});
 
 //Layout : false == Ne pas utiliser le modèle par défaut du layout
 app.use((req, res, next) => {

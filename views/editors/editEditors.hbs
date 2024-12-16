@@ -1,0 +1,10 @@
+<h1>Modifier l'Éditeur : {{editor.name}}</h1>
+<form action="/editors/update/{{editor.id}}" method="post">
+    <label for="editor-name">Nom :</label>
+    <input type="text" id="editor-name" name="editor-name" value="{{editor.name}}" required>
+
+    <label for="editor-description">Description :</label>
+    <textarea id="editor-description" name="editor-description" required>{{editor.description}}</textarea>
+
+    <button type="submit">Mettre à jour</button>
+</form>

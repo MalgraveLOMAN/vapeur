@@ -1,0 +1,28 @@
+<h1>Modifier le jeu : {{games.title}}</h1>
+<form action="/game/update/{{games.id}}" method="post">
+    <label for="game-title">Titre :</label>
+    <input type="text" id="game-title" name="game-title" value="{{games.title}}" required>
+
+    <label for="game-description">Description :</label>
+    <textarea id="game-description" name="game-description" required>{{games.description}}</textarea>
+
+    <label for="game-editor">Éditeur :</label>
+    <select id="game-editor" name="game-editor" required>
+        {{#each editors}}
+        <option value="{{id}}" {{setValue id ../games.editorId "selected" }}>{{name}}</option>
+        {{/each}}
+    </select>
+
+    <label for="game-type">Type de jeu :</label>
+    <select id="game-type" name="game-type" required>
+        {{#each types}}
+        <option value="{{id}}" {{setValue id ../games.typeId "selected" }}>{{type}}</option>
+        {{/each}}
+    </select>
+
+    <label for="game-release-date">Date de sortie :</label>
+    <input type="date" id="game-release-date" name="game-release-date" value="{{games.releaseDate}}" required>
+    <p>{{games.releaseDate}}</p>
+
+    <button type="submit">Mettre à jour</button>
+</form>
