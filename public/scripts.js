@@ -96,7 +96,3 @@ function Click(event) {
         openFormId = null;
     }
 }
-
-
-
-
