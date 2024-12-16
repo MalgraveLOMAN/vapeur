@@ -43,12 +43,12 @@
 
 ## Commandes supplémentaires
 
-- **Mode de développement :** :
+- **Mode de développement :**
   ```bash
   npm run dev
   ```
 
-- **Vider la base de données :** :
+- **Vider la base de données :**
   ```bash
   npx prisma migrate reset
   ```
