@@ -9,7 +9,7 @@
 
 1. Clonez le projet sur votre ordinateur ou téléchargez le code source et suivez les étapes :
    ```bash
-   git clone <https://github.com/MalgraveLOMAN/vapeur.git>
+   git clone https://github.com/MalgraveLOMAN/vapeur.git
    ```
 
 2. Dans le terminal Node, rendez-vous à la racine du projet et executez les étapes suivantes :
