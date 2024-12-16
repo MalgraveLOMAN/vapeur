@@ -1,32 +1,59 @@
-// Imports
+//Imports
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const bodyParser = require("body-parser");
 const hbs = require("hbs");
 const path = require("path");
 const multer = require('multer');
-
-// App creation
+//PrimaClient Creation & Express server Creation
 const prisma = new PrismaClient();
 const app = express();
 const PORT = 3000;
 
-// Server & Handlebars config
+//Express & Handlebars config
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
-hbs.registerPartials(path.join(__dirname, "views", "partials"));
-
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//Gestion des menu déroulant des fomulaires, ajout global à la réponse de requête
-//Si types et editors sont vide alors, le récupérer dans la bdd, sinon, juste assigner à res.locals.type ou alors excuter à chaque refresh
+hbs.registerPartials(path.join(__dirname, "views", "partials"));
+
+//Helper used in editGames in order to set a dropdown menu value
+hbs.registerHelper('setValue', function (value1, value2, attribute) {
+    return value1 === value2 ? attribute : '';
+});
+
+//Multer configuration & filtering
+const ImageFile = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/img/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    const Types = ['image/jpeg', 'image/png',];
+    if (Types.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Unsuported image type'), false);
+    }
+};
+
+const upload = multer({
+    storage: ImageFile,
+    fileFilter
+});
+
 //https://www.geeksforgeeks.org/express-js-res-locals-property/
+//Local.res creation & gestion
 let TypesEditorObject = { types: null, editors: null, lastUpdate: 0 };
 app.use(async (req, res, next) => {
     let now = Date.now();
     try {
-        if (!TypesEditorObject.types || !TypesEditorObject.editors || now - TypesEditorObject.lastUpdate > 1) {
+        if (!TypesEditorObject.types || !TypesEditorObject.editors || now - TypesEditorObject.lastUpdate > 100) {
             TypesEditorObject.types = await prisma.Type.findMany();
             TypesEditorObject.editors = await prisma.Editor.findMany({
                 where: {
@@ -40,11 +67,11 @@ app.use(async (req, res, next) => {
         next();
     } catch (error) {
         console.error(error);
-        next(error);
+        next();
     }
 });
 
-//Renvoyer les dates sous un format YYYY
+//Return YYYY type dates
 function formatGameDates(games) {
     games.forEach(game => {
         if (game.releaseDate instanceof Date) {
@@ -53,10 +80,6 @@ function formatGameDates(games) {
     });
     return games;
 }
-hbs.registerHelper('setValue', function (value1, value2, attribute) {
-    return value1 === value2 ? attribute : '';
-});
-//Data Creation & Data Check
 
 async function CheckInsert() {
     try {
@@ -184,42 +207,11 @@ async function DataTests() {
     }
 }
 
-//Vérifier si les genres de jeux existent ou non, si non alors les insérer dans la base de données
-CheckInsert();
-//Insérer un sample de données pour effectuer des tests
-DataTests();
-//Mettre à jours les editeurs et les types//////////////////
-//              //
-//    C R U D   //
-//              //
-//////////////////
+//
+//  CREATE
+//
 
-// Create Data Section
-
-const ImageFile = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'public/img/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
-
-const fileFilter = (req, file, cb) => {
-    const Types = ['image/jpeg', 'image/png',];
-    if (Types.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(new Error('Unsuported image type'), false);
-    }
-};
-
-const upload = multer({
-    storage: ImageFile,
-    fileFilter
-});
-
-
+//Create Game with Image & Add To DB
 app.post('/gameCreate', upload.single('game-image'), async function (req, res) {
     try {
         const {
@@ -249,7 +241,7 @@ app.post('/gameCreate', upload.single('game-image'), async function (req, res) {
     }
 });
 
-
+//Create Editor & Add To DB
 app.post("/editorCreate", async function (req, res) {
     try {
         const {
@@ -257,8 +249,6 @@ app.post("/editorCreate", async function (req, res) {
             'game-editor-description': description
         } = req.body;
 
-        //Si l'editeur existait au paravant, alors il a déjà une description, si rien n'est renseigné dans le formulaire
-        // L'editeur reprend sa description initiale
         const updateData = { active: true };
         if (description) {
             updateData.description = description;
@@ -281,10 +271,11 @@ app.post("/editorCreate", async function (req, res) {
     }
 });
 
+//
+// READ
+//
 
-// Read Data Section
-
-// Afficher les jeux mis en avant sur la page principale index.hbs
+//Show MainPage (index.hbs)
 app.get("/", async (req, res) => {
     const games = await prisma.Game.findMany({
         where: {
@@ -305,7 +296,7 @@ app.get("/", async (req, res) => {
     });
 });
 
-// Afficher listType.hbs (Liste des genres de jeux)
+//Show PageTypes (listTypes.hbs)
 app.get("/types", async (req, res) => {
     const types = await prisma.Type.findMany({
         orderBy: {
@@ -318,8 +309,8 @@ app.get("/types", async (req, res) => {
     });
 });
 
-// Afficher gamesByType.hbs (Liste des jeux d'un même genre)
-app.get("/games/type/:id", async (req, res) => {
+//Show One particular Type & Its games(gamesByType.hbs)
+app.get("/games/type/:id", async (req, res, next) => {
     const { id } = req.params;
 
     const types = await prisma.Type.findUnique({
@@ -335,14 +326,18 @@ app.get("/games/type/:id", async (req, res) => {
             },
         },
     });
-    formatGameDates(types.games);
-    res.render("types/gamesByType", {
-        title: `Vapeur - ${types.type}`,
-        types,
-    });
+    if (types) {
+        formatGameDates(types.games);
+        res.render("types/gamesByType", {
+            title: `Vapeur - ${types.type}`,
+            types,
+        });
+    } else {
+        return next();
+    }
 });
 
-// Afficher listGames.hbs (Liste de tous les jeux)
+//Show all games (listGames.hbs)
 app.get("/games", async (req, res) => {
     const games = await prisma.Game.findMany({
         include: {
@@ -360,8 +355,8 @@ app.get("/games", async (req, res) => {
     });
 });
 
-// Afficher gameDetails.hbs (Détails d'un seul jeu)
-app.get("/games/:id", async (req, res) => {
+//Show One particular Game (gameDetails.hbs)
+app.get("/games/:id", async (req, res, next) => {
     const { id } = req.params;
     const games = await prisma.Game.findUnique({
         where: { id: parseInt(id) },
@@ -370,15 +365,18 @@ app.get("/games/:id", async (req, res) => {
             editor: true,
         },
     });
-    games.releaseDate = games.releaseDate.getFullYear();
-
-    res.render("games/gameDetails", {
-        title: `Vapeur - ${games.title}`,
-        games,
-    });
+    if (games) {
+        games.releaseDate = games.releaseDate.getFullYear();
+        res.render("games/gameDetails", {
+            title: `Vapeur - ${games.title}`,
+            games,
+        });
+    } else {
+        return next();
+    }
 });
 
-// Afficher les listEditors.hbs (Liste de tous les éditeurs de jeux)
+//Show all editors (listEditors.hbs)
 app.get("/editors", async (req, res) => {
     const a_editors = await prisma.Editor.findMany({
         orderBy: {
@@ -391,8 +389,8 @@ app.get("/editors", async (req, res) => {
     });
 });
 
-// Afficher gamesByEditor.hbs (Liste des jeux édités par un éditeur)
-app.get("/games/editor/:id", async (req, res) => {
+//Show One particular Editor & Its games(gamesByEditor.hbs)
+app.get("/games/editor/:id", async (req, res, next) => {
     const { id } = req.params;
     const editor = await prisma.Editor.findUnique({
         where: { id: parseInt(id) },
@@ -404,35 +402,94 @@ app.get("/games/editor/:id", async (req, res) => {
             },
         },
     });
-    if (editor.active) {
-        formatGameDates(editor.games);
+    if (editor && editor.active) {
+            formatGameDates(editor.games);
         res.render("editors/gamesByEditor", {
             title: `Vapeur - ${editor.name}`,
             editor,
-        });
-    }
+        });}
     else {
-        res.redirect("/404");
+        return next();
     }
 });
 
-// Update Data Section
+//Show the update game page (editGames.hbs)
+app.get("/games/update/:id", async (req, res, next) => {
+    const { id } = req.params;
+    const games = await prisma.Game.findUnique({
+        where: { id: parseInt(id) },
+        include: {
+            type: true,
+            editor: true
+        }
+    });
+    if (games) {
+        games.releaseDate = new Date(games.releaseDate).toISOString().split('T')[0];
+        res.render("games/editGames", {
+            title: `Vapeur - Modifier ${games.title}`,
+            games,
+            types: res.locals.types,
+            editors: res.locals.editors
+        });
+    } else {
+        return next();
+    }
+});
+
+//Show the update editor page (editEditors.hbs)
+app.get("/editors/update/:id", async (req, res, next) => {
+    const { id } = req.params;
+    const editor = await prisma.Editor.findUnique({
+        where: { id: parseInt(id) },
+    });
+
+    if (editor) {
+        res.render("editors/editEditors", {
+            title: `Modifier l'Éditeur : ${editor.name}`,
+            editor,
+        });
+    } else {
+        return next();
+    }
+});
+
+//
+// UPDATE
+//
+
+//Update One Editor Data
+app.post("/editors/update/:id", async (req, res) => {
+    const { id } = req.params;
+    const { 'editor-name': name, 'editor-description': description } = req.body;
+
+    await prisma.Editor.update({
+        where: { id: parseInt(id) },
+        data: {
+            name,
+            description,
+        },
+    });
+
+    res.redirect(`/editors`);
+});
+
+//Update One game Data
 app.post("/game/update/:id", async (req, res) => {
     const { id } = req.params;
     const { 'game-title': title, 'game-description': description, 'game-editor': editorId, 'game-type': typeId, 'game-release-date': releaseDate } = req.body;
-        await prisma.Game.update({
-            where: { id: parseInt(id) },
-            data: {
-                title,
-                description,
-                releaseDate: new Date(releaseDate),
-                typeId: parseInt(typeId),
-                editorId: parseInt(editorId),
-            },
-        });
-        res.redirect(`/games/${id}`);
+    await prisma.Game.update({
+        where: { id: parseInt(id) },
+        data: {
+            title,
+            description,
+            releaseDate: new Date(releaseDate),
+            typeId: parseInt(typeId),
+            editorId: parseInt(editorId),
+        },
+    });
+    res.redirect(`/games/${id}`);
 });
-//Enlever les jeux de la front page
+//Remove a game from Front Page
 app.post("/removeFront", async (req, res) => {
     let games = req.body['game-id'];
     games: [games];
@@ -452,7 +509,7 @@ app.post("/removeFront", async (req, res) => {
     res.redirect(req.get("referer"));
 });
 
-//Ajouter les jeux à la frontpage
+//Add a game tp Front Page
 app.post("/addFront", async (req, res) => {
     let games = req.body['game-id'];
     games: [games];
@@ -471,8 +528,11 @@ app.post("/addFront", async (req, res) => {
     res.redirect(req.get("referer"));
 })
 
+//
+// DELETE
+//
 
-//Supprimer les editeurs
+//Delete an editor
 app.post("/editor/delete", async (req, res) => {
     let editors = req.body['editor-id'];
     editors: [editors];
@@ -492,9 +552,7 @@ app.post("/editor/delete", async (req, res) => {
     res.redirect("/editors");
 })
 
-// Delete Data Section
-
-//Supprimer les jeux
+//Delete a game
 app.post("/game/delete", async (req, res) => {
     let games = req.body['game-id'];
     games: [games];
@@ -510,78 +568,22 @@ app.post("/game/delete", async (req, res) => {
     res.redirect("/games");
 })
 
-app.get("/games/update/:id", async (req, res) => {
-    const { id } = req.params;  
-    const games = await prisma.Game.findUnique({
-        where: { id: parseInt(id) },  
-        include: {
-            type: true,   
-            editor: true  
-        }
-    });
-    games.releaseDate = new Date(games.releaseDate).toISOString().split('T')[0];
+//
+// Handle 404 errors
+//
 
-    // Si le jeu existe, le passer à la vue d'édition
-    if (games) {
-        res.render("games/editGames", {
-            title: `Vapeur - Modifier ${games.title}`,
-            games,         
-            types: res.locals.types,  
-            editors: res.locals.editors 
-        });
-    } else {
-        res.status(404).send("Jeu non trouvé");
-    }
-});
-// Route pour afficher le formulaire d'édition d'un éditeur
-app.get("/editors/update/:id", async (req, res) => {
-    const { id } = req.params;
-    const editor = await prisma.Editor.findUnique({
-        where: { id: parseInt(id) },
-    });
-
-    if (editor) {
-        res.render("editors/editEditors", {
-            title: `Modifier l'Éditeur : ${editor.name}`,
-            editor,
-        });
-    } else {
-        res.status(404).send("Éditeur non trouvé");
-    }
-});
-
-// Route pour mettre à jour un éditeur
-app.post("/editors/update/:id", async (req, res) => {
-    const { id } = req.params;
-    const { 'editor-name': name, 'editor-description': description } = req.body;
-
-    await prisma.Editor.update({
-        where: { id: parseInt(id) },
-        data: {
-            name,
-            description,
-        },
-    });
-
-    res.redirect(`/editors`);
-});
-
-//Layout : false == Ne pas utiliser le modèle par défaut du layout
-/*
-app.use((req, res, next) => {
+app.use((req, res) => {
     res.status(404).render('404', {
         layout: false
     });
 });
-*/
 
-//////////////////////
-//                  //
-//   A faire : 404  //
-//                  //
-//////////////////////
+//Check if Datas are set in db, if not create them.
+CheckInsert();
+//Create Data
+DataTests();
+//Start Server on port = PORT
 
-// Mettre le serveur en mode écoute
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

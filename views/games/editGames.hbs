@@ -10,14 +10,14 @@
     <label for="game-editor">Éditeur :</label>
     <select id="game-editor" name="game-editor" required>
         {{#each editors}}
-        <option value="{{id}}" {{setValue id ../games.editorId "selected"}}>{{name}}</option>
+        <option value="{{id}}" {{setValue id ../games.editorId "selected" }}>{{name}}</option>
         {{/each}}
     </select>
 
     <label for="game-type">Type de jeu :</label>
     <select id="game-type" name="game-type" required>
         {{#each types}}
-        <option value="{{id}}" {{setValue id ../games.typeId "selected"}}>{{type}}</option>
+        <option value="{{id}}" {{setValue id ../games.typeId "selected" }}>{{type}}</option>
         {{/each}}
     </select>
 

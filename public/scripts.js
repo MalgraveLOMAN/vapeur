@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
+    //Close all forms on load
     document.querySelectorAll(".form-popup").forEach(f => {
         f.style.display = "none";
     });
+    //Handler Form buttons actions
     const formActions = {
         "game-form": {
             "remove-front": "/removeFront",
@@ -28,16 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) { }
 });
 
-
-let openFormId = null;
-//https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation
-//Empêche le document de detecter les clicks sur les formulaires et les boutons (utile pour l'ouverture et la fermeture des formulaires)
-document.querySelectorAll(".form-popup, .open-button").forEach(element => {
-    element.addEventListener("click", event => event.stopPropagation());
-});
-
+//Creates a Carousel
 //https://www.w3schools.com/howto/howto_js_slideshow.asp
-//Ajout d'un carousel des jeux mis en avant
 function Carousel() {
     let slideIndex = 1;
     showSlides(slideIndex);
@@ -60,7 +54,7 @@ function Carousel() {
     }
 }
 
-//Popup Form afficher ou fermer (si on click à côté ou alors sur le boutton close)
+//Close Form if close is clicked or another form is opened
 //https://www.w3schools.com/howto/howto_js_popup_form.asp
 function openForm(formId) {
     const form = document.getElementById(formId);
@@ -83,16 +77,4 @@ function openForm(formId) {
 function closeForm(formId) {
     const form = document.getElementById(formId);
     if (form) form.style.display = "none";
-}
-//gestrion des clicks à côté du formulaire, si formulaire non clické, alors fermer le fomulaire
-//https://stackoverflow.com/questions/22018136/how-do-i-detect-if-something-is-being-clicked-in-javascript-without-using-jque
-function Click(event) {
-    if (!openFormId) return;
-
-    const openFormElement = document.getElementById(openFormId);
-
-    if (!openFormElement.contains(event.target)) {
-        openFormElement.style.display = "none";
-        openFormId = null;
-    }
 }
