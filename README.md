@@ -48,7 +48,7 @@
   npm run dev
   ```
 
-- **Vider la base de données : ** :
+- **Vider la base de données :** :
   ```bash
   npx prisma migrate reset
   ```
